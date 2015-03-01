@@ -11,5 +11,13 @@
     "url": "todo"
   },
   "author": "Christian Nilsson <christian@klamby.com> (http://klamby.com/)",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "6to5ify": "^4.1.1",
+    "gulp": "^3.8.11",
+    "gulp-6to5": "^3.0.0",
+    "gulp-browserify": "^0.5.1",
+    "gulp-markdox": "^0.1.1",
+    "gulp-rename": "^1.2.0"
+  }
 }
