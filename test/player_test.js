@@ -171,13 +171,13 @@ describe('Player', function () {
     });
   });
 
-  describe('#getName', function () {
+  describe('#name', function () {
     it('should be defined', function () {
-      expect(sut.getName).toBeDefined();
+      expect(sut.name).toBeDefined();
     });
 
     it('should return the name', function () {
-      expect(sut.getName()).toEqual('audiofile1');
+      expect(sut.name()).toEqual('audiofile1');
     });
   });
 

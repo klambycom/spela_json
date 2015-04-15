@@ -66,10 +66,10 @@ class Player {
   }
 
   /**
-   * @method getName
+   * @method name
    */
 
-  getName() {
+  name() {
     return this._json_data.name;
   }
 

@@ -88,13 +88,13 @@ var Player = (function () {
       writable: true,
       configurable: true
     },
-    getName: {
+    name: {
 
       /**
-       * @method getName
+       * @method name
        */
 
-      value: function getName() {
+      value: function name() {
         return this._json_data.name;
       },
       writable: true,
