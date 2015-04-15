@@ -4,6 +4,7 @@
 
 /*! */
 
+let context = new AudioContext();
 let cloneObject = json => JSON.parse(JSON.stringify(json));
 
 class Player {
@@ -37,6 +38,21 @@ class Player {
 
   getJSON() {
     return cloneObject(this.json_data);
+  }
+
+  /**
+   * @method getName
+   */
+
+  getName() {
+    return this.json_data.name;
+  }
+
+  /**
+   * @method getDuration
+   */
+
+  getDuration() {
   }
 
   /**

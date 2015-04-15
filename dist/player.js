@@ -10,6 +10,7 @@ var _classCallCheck = function (instance, Constructor) { if (!(instance instance
 
 /*! */
 
+var context = new AudioContext();
 var cloneObject = function (json) {
   return JSON.parse(JSON.stringify(json));
 };
@@ -56,6 +57,28 @@ var Player = (function () {
       value: function getJSON() {
         return cloneObject(this.json_data);
       },
+      writable: true,
+      configurable: true
+    },
+    getName: {
+
+      /**
+       * @method getName
+       */
+
+      value: function getName() {
+        return this.json_data.name;
+      },
+      writable: true,
+      configurable: true
+    },
+    getDuration: {
+
+      /**
+       * @method getDuration
+       */
+
+      value: function getDuration() {},
       writable: true,
       configurable: true
     },

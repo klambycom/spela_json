@@ -65,4 +65,20 @@ describe('Player', function () {
       expect(sut.getJSON()).toEqual({ name: 'walt' });
     });
   });
+
+  describe('#getName', function () {
+    it('should be defined', function () {
+      expect(sut.getName).toBeDefined();
+    });
+
+    it('should return the name', function () {
+      expect(sut.getName()).toEqual('audiofile1');
+    });
+  });
+
+  describe('#getDuration', function () {
+    it('should be defined', function () {
+      expect(sut.getDuration).toBeDefined();
+    });
+  });
 });

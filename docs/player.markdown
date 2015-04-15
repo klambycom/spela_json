@@ -26,6 +26,10 @@ Get the JSON.
 
 * **Object** json The audio json
 
+## getName()
+
+## getDuration()
+
 ## play()
 
 <!-- End src/player.js -->
