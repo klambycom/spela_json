@@ -85,7 +85,10 @@ class Player {
    */
 
   play() {
+    if (!this.ready()) return false;
+
     this._files().forEach(x => this._playFile(x));
+    return true;
   }
 
   /**

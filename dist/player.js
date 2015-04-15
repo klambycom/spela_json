@@ -117,9 +117,12 @@ var Player = (function () {
 
       value: function play() {
         var _this = this;
-        this._files().forEach(function (x) {
+        if (!this.ready()) {
+          return false;
+        }this._files().forEach(function (x) {
           return _this._playFile(x);
         });
+        return true;
       },
       writable: true,
       configurable: true

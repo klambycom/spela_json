@@ -1,7 +1,18 @@
 var rewire = require('rewire');
 var Player = rewire('../dist/player.js');
 
-global.AudioContext = function () {};
+global.AudioContext = function () {
+  return {
+    createBufferSource: function () {
+      return {
+        buffer: '',
+        connect: function () {},
+        start: function () {}
+      };
+    }
+  }
+};
+
 global.XMLHttpRequest = function () {
   return {
     open: function () {},
@@ -50,10 +61,6 @@ describe('Player', function () {
     sut = new Player(data);
   });
 
-  it('should have a play-function', function () {
-    expect(sut.play).toBeDefined();
-  });
-
   it('should have a _countFiles-function', function () {
     expect(sut._countFiles()).toEqual(5);
   });
@@ -66,6 +73,34 @@ describe('Player', function () {
     it('shuld copy the JSON', function () {
       data.name = 'af1';
       expect(sut._json_data).toEqual(dataCopy);
+    });
+  });
+
+  describe('#play', function () {
+    it('should have a play-function', function () {
+      expect(sut.play).toBeDefined();
+    });
+
+    it('should return true when not ready and can\'t play', function () {
+      expect(sut.play()).toEqual(false);
+    });
+
+    it('should not play when all files is not ready', function () {
+      spyOn(sut, '_playFile');
+      sut.play();
+      expect(sut._playFile).not.toHaveBeenCalled();
+    });
+
+    it('should return true when ready and can play', function () {
+      sut._counter = 5;
+      expect(sut.play()).toEqual(true);
+    });
+
+    it('should play when all files is ready', function () {
+      spyOn(sut, '_playFile');
+      sut._counter = 5;
+      sut.play();
+      expect(sut._playFile).toHaveBeenCalled();
     });
   });
 
