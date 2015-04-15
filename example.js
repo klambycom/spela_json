@@ -33,3 +33,7 @@ let file = {
 
 var player = new ljud(file);
 player.play();
+
+console.log(player.getJSON());
+
+window.player = player;

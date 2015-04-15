@@ -114,12 +114,7 @@ class Player {
 
   _loadFiles() {
     let load = x => {
-      let updateCounter = (buffer) => {
-        this._counter += 1;
-        this._json_data.data[x].buffer = buffer;
-      };
-
-      return loadSound(this._context, updateCounter, this._json_data.data[x].file);
+      return loadSound(this._context, () => this._counter += 1, this._json_data.data[x].file);
     };
 
     Object

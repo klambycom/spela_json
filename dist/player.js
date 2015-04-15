@@ -158,12 +158,9 @@ var Player = (function () {
       value: function _loadFiles() {
         var _this = this;
         var load = function (x) {
-          var updateCounter = function (buffer) {
-            _this._counter += 1;
-            _this._json_data.data[x].buffer = buffer;
-          };
-
-          return loadSound(_this._context, updateCounter, _this._json_data.data[x].file);
+          return loadSound(_this._context, function () {
+            return _this._counter += 1;
+          }, _this._json_data.data[x].file);
         };
 
         Object.keys(this._json_data.data).filter(this._isFile.bind(this)).forEach(load);
