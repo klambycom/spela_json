@@ -40,51 +40,6 @@ class Player {
   }
 
   /**
-   * Update JSON.
-   *
-   * @method setJSON
-   * @param {Object} json The audio json
-   */
-
-  setJSON(json = {}) {
-    this._json_data = cloneObject(json);
-    this._counter = 0; // Reset counter for loaded files
-    this._sources = []; // Reset buffer sources
-    this._nr_of_files = this._countFiles();
-    this._loadFiles();
-  }
-
-  /**
-   * Get the JSON.
-   *
-   * @method getJSON
-   * @return {Object} json The audio json
-   */
-
-  getJSON() {
-    return cloneObject(this._json_data);
-  }
-
-  /**
-   * @method name
-   */
-
-  name() {
-    return this._json_data.name;
-  }
-
-  /**
-   * @method duration
-   */
-
-  duration() {
-    return this._files().reduce((acc, x) => {
-      let dur = x.start + soundCache[x.file].duration;
-      return dur > acc ? dur : acc;
-    }, 0);
-  }
-
-  /**
    * @method play
    */
 
@@ -110,6 +65,51 @@ class Player {
 
   ready() {
     return this._counter === this._nr_of_files;
+  }
+
+  /**
+   * @method name
+   */
+
+  name() {
+    return this._json_data.name;
+  }
+
+  /**
+   * @method duration
+   */
+
+  duration() {
+    return this._files().reduce((acc, x) => {
+      let dur = x.start + soundCache[x.file].duration;
+      return dur > acc ? dur : acc;
+    }, 0);
+  }
+
+  /**
+   * Update JSON.
+   *
+   * @method setJSON
+   * @param {Object} json The audio json
+   */
+
+  setJSON(json = {}) {
+    this._json_data = cloneObject(json);
+    this._counter = 0; // Reset counter for loaded files
+    this._sources = []; // Reset buffer sources
+    this._nr_of_files = this._countFiles();
+    this._loadFiles();
+  }
+
+  /**
+   * Get the JSON.
+   *
+   * @method getJSON
+   * @return {Object} json The audio json
+   */
+
+  getJSON() {
+    return cloneObject(this._json_data);
   }
 
   /*!

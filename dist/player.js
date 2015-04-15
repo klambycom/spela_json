@@ -53,68 +53,6 @@ var Player = (function () {
   }
 
   _prototypeProperties(Player, null, {
-    setJSON: {
-
-      /**
-       * Update JSON.
-       *
-       * @method setJSON
-       * @param {Object} json The audio json
-       */
-
-      value: function setJSON() {
-        var json = arguments[0] === undefined ? {} : arguments[0];
-        this._json_data = cloneObject(json);
-        this._counter = 0; // Reset counter for loaded files
-        this._sources = []; // Reset buffer sources
-        this._nr_of_files = this._countFiles();
-        this._loadFiles();
-      },
-      writable: true,
-      configurable: true
-    },
-    getJSON: {
-
-      /**
-       * Get the JSON.
-       *
-       * @method getJSON
-       * @return {Object} json The audio json
-       */
-
-      value: function getJSON() {
-        return cloneObject(this._json_data);
-      },
-      writable: true,
-      configurable: true
-    },
-    name: {
-
-      /**
-       * @method name
-       */
-
-      value: function name() {
-        return this._json_data.name;
-      },
-      writable: true,
-      configurable: true
-    },
-    duration: {
-
-      /**
-       * @method duration
-       */
-
-      value: function duration() {
-        return this._files().reduce(function (acc, x) {
-          var dur = x.start + soundCache[x.file].duration;
-          return dur > acc ? dur : acc;
-        }, 0);
-      },
-      writable: true,
-      configurable: true
-    },
     play: {
 
       /**
@@ -156,6 +94,68 @@ var Player = (function () {
 
       value: function ready() {
         return this._counter === this._nr_of_files;
+      },
+      writable: true,
+      configurable: true
+    },
+    name: {
+
+      /**
+       * @method name
+       */
+
+      value: function name() {
+        return this._json_data.name;
+      },
+      writable: true,
+      configurable: true
+    },
+    duration: {
+
+      /**
+       * @method duration
+       */
+
+      value: function duration() {
+        return this._files().reduce(function (acc, x) {
+          var dur = x.start + soundCache[x.file].duration;
+          return dur > acc ? dur : acc;
+        }, 0);
+      },
+      writable: true,
+      configurable: true
+    },
+    setJSON: {
+
+      /**
+       * Update JSON.
+       *
+       * @method setJSON
+       * @param {Object} json The audio json
+       */
+
+      value: function setJSON() {
+        var json = arguments[0] === undefined ? {} : arguments[0];
+        this._json_data = cloneObject(json);
+        this._counter = 0; // Reset counter for loaded files
+        this._sources = []; // Reset buffer sources
+        this._nr_of_files = this._countFiles();
+        this._loadFiles();
+      },
+      writable: true,
+      configurable: true
+    },
+    getJSON: {
+
+      /**
+       * Get the JSON.
+       *
+       * @method getJSON
+       * @return {Object} json The audio json
+       */
+
+      value: function getJSON() {
+        return cloneObject(this._json_data);
       },
       writable: true,
       configurable: true

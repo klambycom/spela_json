@@ -11,6 +11,20 @@
 * **Object** *json* The audio json
 * **AudioContext** *context* 
 
+## play()
+
+## stop()
+
+## ready()
+
+### Return:
+
+* **Boolean** true if all files are loaded
+
+## name()
+
+## duration()
+
 ## setJSON(json)
 
 Update JSON.
@@ -26,20 +40,6 @@ Get the JSON.
 ### Return:
 
 * **Object** json The audio json
-
-## name()
-
-## duration()
-
-## play()
-
-## stop()
-
-## ready()
-
-### Return:
-
-* **Boolean** true if all files are loaded
 
 <!-- End src/player.js -->
 
