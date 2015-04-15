@@ -74,11 +74,14 @@ class Player {
   }
 
   /**
-   * @method getDuration
+   * @method duration
    */
 
-  getDuration() {
-    // TODO!
+  duration() {
+    return this._files().reduce((acc, x) => {
+      let dur = x.start + soundCache[x.file].duration;
+      return dur > acc ? dur : acc;
+    }, 0);
   }
 
   /**

@@ -181,9 +181,9 @@ describe('Player', function () {
     });
   });
 
-  describe('#getDuration', function () {
+  describe('#duration', function () {
     it('should be defined', function () {
-      expect(sut.getDuration).toBeDefined();
+      expect(sut.duration).toBeDefined();
     });
   });
 

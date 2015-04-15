@@ -29,7 +29,7 @@ Get the JSON.
 
 ## getName()
 
-## getDuration()
+## duration()
 
 ## play()
 

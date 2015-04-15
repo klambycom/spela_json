@@ -100,13 +100,18 @@ var Player = (function () {
       writable: true,
       configurable: true
     },
-    getDuration: {
+    duration: {
 
       /**
-       * @method getDuration
+       * @method duration
        */
 
-      value: function getDuration() {},
+      value: function duration() {
+        return this._files().reduce(function (acc, x) {
+          var dur = x.start + soundCache[x.file].duration;
+          return dur > acc ? dur : acc;
+        }, 0);
+      },
       writable: true,
       configurable: true
     },
@@ -241,4 +246,3 @@ var Player = (function () {
 })();
 
 module.exports = Player;
-// TODO!
