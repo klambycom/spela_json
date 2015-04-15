@@ -12,9 +12,10 @@ var paths = {
   docs:  'docs',
   tests: 'test/**/*_test.js',
   example: {
-    html: 'example.html',
-    js:   'example.js',
-    dist: 'dist/example'
+    html:   'example.html',
+    js:     'example.js',
+    sounds: 'sounds/*',
+    dist:   'dist/example'
   }
 };
 
@@ -32,6 +33,11 @@ gulp.task('example:browserify', function () {
 
 gulp.task('example:html', function () {
   return gulp.src(paths.example.html)
+    .pipe(gulp.dest(paths.example.dist));
+});
+
+gulp.task('example:sounds', function () {
+  return gulp.src(paths.example.sounds)
     .pipe(gulp.dest(paths.example.dist));
 });
 

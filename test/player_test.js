@@ -15,7 +15,27 @@ describe('Player', function () {
       data: {
         '1': {
           type: 'file',
-          file: '',
+          file: '/alien_phaser.wav',
+          start: 0
+        },
+        '2': {
+          type: 'file',
+          file: '/car.wav',
+          start: 0
+        },
+        '3': {
+          type: 'file',
+          file: '/crumple_paper.wav',
+          start: 0
+        },
+        '4': {
+          type: 'file',
+          file: '/mbira.wav',
+          start: 0
+        },
+        '5': {
+          type: 'file',
+          file: '/surround.wav',
           start: 0
         }
       }
