@@ -47,7 +47,13 @@ class Player {
 
   setJSON(json = {}) {
     this._json_data = cloneObject(json);
+    // Reset counter for loaded files
     this._counter = 0;
+    // Update counter for nr of files
+    this._nr_of_files = Object
+      .keys(json.data)
+      .filter(x => json.data[x].type === 'file')
+      .length;
   }
 
   /**
@@ -91,6 +97,7 @@ class Player {
    */
 
   ready() {
+    return this._counter === this._nr_of_files;
   }
 }
 

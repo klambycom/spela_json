@@ -64,7 +64,12 @@ var Player = (function () {
       value: function setJSON() {
         var json = arguments[0] === undefined ? {} : arguments[0];
         this._json_data = cloneObject(json);
+        // Reset counter for loaded files
         this._counter = 0;
+        // Update counter for nr of files
+        this._nr_of_files = Object.keys(json.data).filter(function (x) {
+          return json.data[x].type === "file";
+        }).length;
       },
       writable: true,
       configurable: true
@@ -125,7 +130,9 @@ var Player = (function () {
        * @return {Boolean} true if all files are loaded
        */
 
-      value: function ready() {},
+      value: function ready() {
+        return this._counter === this._nr_of_files;
+      },
       writable: true,
       configurable: true
     }

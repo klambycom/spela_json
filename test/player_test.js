@@ -82,7 +82,8 @@ describe('Player', function () {
 
     beforeEach(function () {
       json = {
-        name: 'walt'
+        name: 'walt',
+        data: {}
       };
       sut.setJSON(json);
     });
@@ -92,16 +93,21 @@ describe('Player', function () {
     });
 
     it('should change the JSON', function () {
-      expect(sut.getJSON()).toEqual({ name: 'walt' });
+      expect(sut.getJSON()).toEqual({ name: 'walt', data: {} });
     });
 
     it('should change the JSON', function () {
       json.name = 'jesse';
-      expect(sut.getJSON()).toEqual({ name: 'walt' });
+      expect(sut.getJSON()).toEqual({ name: 'walt', data: {} });
     });
 
     it('should reset loaded files counter', function () {
       expect(sut._counter).toEqual(0);
+    });
+
+    it('should count nr of files', function () {
+      sut.setJSON(data);
+      expect(sut._nr_of_files).toEqual(5);
     });
   });
 
@@ -124,6 +130,16 @@ describe('Player', function () {
   describe('#ready', function () {
     it('should be defined', function () {
       expect(sut.ready).toBeDefined();
+    });
+
+    it('should return false when no files are loaded', function () {
+      sut._counter = 0;
+      expect(sut.ready()).toEqual(false);
+    });
+
+    it('should return true when all files is loaded', function () {
+      sut._counter = 5;
+      expect(sut.ready()).toEqual(true);
     });
   });
 });
