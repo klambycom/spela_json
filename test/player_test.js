@@ -23,12 +23,12 @@ describe('Player', function () {
 
   describe('#constructor', function () {
     it('shuld take JSON as input to constructor', function () {
-      expect(sut.json_data).toEqual({ name: 'audiofile1' });
+      expect(sut._json_data).toEqual({ name: 'audiofile1' });
     });
 
     it('shuld copy the JSON', function () {
       data.name = 'af1';
-      expect(sut.json_data).toEqual({ name: 'audiofile1' });
+      expect(sut._json_data).toEqual({ name: 'audiofile1' });
     });
   });
 

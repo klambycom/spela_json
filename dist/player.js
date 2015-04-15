@@ -53,7 +53,7 @@ var Player = (function () {
 
       value: function setJSON() {
         var json = arguments[0] === undefined ? {} : arguments[0];
-        this.json_data = cloneObject(json);
+        this._json_data = cloneObject(json);
         this._counter = 0;
       },
       writable: true,
@@ -69,7 +69,7 @@ var Player = (function () {
        */
 
       value: function getJSON() {
-        return cloneObject(this.json_data);
+        return cloneObject(this._json_data);
       },
       writable: true,
       configurable: true
@@ -81,7 +81,7 @@ var Player = (function () {
        */
 
       value: function getName() {
-        return this.json_data.name;
+        return this._json_data.name;
       },
       writable: true,
       configurable: true

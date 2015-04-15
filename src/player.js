@@ -38,7 +38,7 @@ class Player {
    */
 
   setJSON(json = {}) {
-    this.json_data = cloneObject(json);
+    this._json_data = cloneObject(json);
     this._counter = 0;
   }
 
@@ -50,7 +50,7 @@ class Player {
    */
 
   getJSON() {
-    return cloneObject(this.json_data);
+    return cloneObject(this._json_data);
   }
 
   /**
@@ -58,7 +58,7 @@ class Player {
    */
 
   getName() {
-    return this.json_data.name;
+    return this._json_data.name;
   }
 
   /**
