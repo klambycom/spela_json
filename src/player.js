@@ -85,7 +85,12 @@ class Player {
    */
 
   play() {
-    console.log('play');
+    Object
+      .keys(this._json_data.data)
+      .filter(this._isFile.bind(this))
+      .forEach(x => {
+        this._playFile(this._json_data.data[x]);
+      });
   }
 
   /**
@@ -114,7 +119,7 @@ class Player {
 
   _loadFiles() {
     let load = x => {
-      return loadSound(this._context, () => this._counter += 1, this._json_data.data[x].file);
+      loadSound(this._context, () => this._counter += 1, this._json_data.data[x].file);
     };
 
     Object
@@ -135,6 +140,18 @@ class Player {
       .keys(this._json_data.data)
       .filter(this._isFile.bind(this))
       .length;
+  }
+
+  /*!
+   * @method _playFile
+   * @param {Object} file
+   */
+
+  _playFile(file) {
+    let source = this._context.createBufferSource();
+    source.buffer = soundCache[file.file];
+    source.connect(this._context.destination);
+    source.start(0);
   }
 }
 

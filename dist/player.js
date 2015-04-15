@@ -116,7 +116,10 @@ var Player = (function () {
        */
 
       value: function play() {
-        console.log("play");
+        var _this = this;
+        Object.keys(this._json_data.data).filter(this._isFile.bind(this)).forEach(function (x) {
+          _this._playFile(_this._json_data.data[x]);
+        });
       },
       writable: true,
       configurable: true
@@ -158,7 +161,7 @@ var Player = (function () {
       value: function _loadFiles() {
         var _this = this;
         var load = function (x) {
-          return loadSound(_this._context, function () {
+          loadSound(_this._context, function () {
             return _this._counter += 1;
           }, _this._json_data.data[x].file);
         };
@@ -179,6 +182,22 @@ var Player = (function () {
 
       value: function _countFiles() {
         return Object.keys(this._json_data.data).filter(this._isFile.bind(this)).length;
+      },
+      writable: true,
+      configurable: true
+    },
+    _playFile: {
+
+      /*!
+       * @method _playFile
+       * @param {Object} file
+       */
+
+      value: function _playFile(file) {
+        var source = this._context.createBufferSource();
+        source.buffer = soundCache[file.file];
+        source.connect(this._context.destination);
+        source.start(0);
       },
       writable: true,
       configurable: true
