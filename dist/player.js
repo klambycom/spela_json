@@ -13,7 +13,7 @@ var Player = (function () {
     var json = arguments[0] === undefined ? {} : arguments[0];
     _classCallCheck(this, Player);
 
-    this.json_data = cloneObject(json);
+    this.setJSON(json);
   }
 
   _prototypeProperties(Player, null, {
