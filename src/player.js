@@ -5,6 +5,14 @@ class Player {
     this.json_data = cloneObject(json);
   }
 
+  setJSON(json = {}) {
+    this.json_data = cloneObject(json);
+  }
+
+  getJSON() {
+    return cloneObject(this.json_data);
+  }
+
   play() {
     console.log('play');
   }

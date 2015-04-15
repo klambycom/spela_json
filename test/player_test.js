@@ -25,4 +25,44 @@ describe('Player', function () {
       expect(sut.json_data).toEqual({ name: 'audiofile1' });
     });
   });
+
+  describe('#getJSON', function () {
+    it('should be defined', function () {
+      expect(sut.getJSON).toBeDefined();
+    });
+
+    it('should return the json', function () {
+      expect(sut.getJSON()).toEqual(data);
+    });
+
+    it('should return a copy of the json', function () {
+      var json = sut.getJSON();
+      json.name = 'fail';
+      expect(sut.getJSON()).toEqual(data);
+    });
+  });
+
+  describe('#setJSON', function () {
+    var json;
+
+    beforeEach(function () {
+      json = {
+        name: 'walt'
+      };
+      sut.setJSON(json);
+    });
+
+    it('should be defined', function () {
+      expect(sut.setJSON).toBeDefined();
+    });
+
+    it('should change the JSON', function () {
+      expect(sut.getJSON()).toEqual({ name: 'walt' });
+    });
+
+    it('should change the JSON', function () {
+      json.name = 'jesse';
+      expect(sut.getJSON()).toEqual({ name: 'walt' });
+    });
+  });
 });

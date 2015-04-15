@@ -17,6 +17,21 @@ var Player = (function () {
   }
 
   _prototypeProperties(Player, null, {
+    setJSON: {
+      value: function setJSON() {
+        var json = arguments[0] === undefined ? {} : arguments[0];
+        this.json_data = cloneObject(json);
+      },
+      writable: true,
+      configurable: true
+    },
+    getJSON: {
+      value: function getJSON() {
+        return cloneObject(this.json_data);
+      },
+      writable: true,
+      configurable: true
+    },
     play: {
       value: function play() {
         console.log("play");
