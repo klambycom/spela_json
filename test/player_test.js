@@ -104,6 +104,12 @@ describe('Player', function () {
     });
   });
 
+  describe('#stop', function () {
+    it('should be defined', function () {
+      expect(sut.stop).toBeDefined();
+    });
+  });
+
   describe('#getJSON', function () {
     it('should be defined', function () {
       expect(sut.getJSON).toBeDefined();
@@ -158,6 +164,10 @@ describe('Player', function () {
       Player.__set__('loadSound', function () { counter += 1; });
       sut.setJSON(data);
       expect(counter).toEqual(5);
+    });
+
+    it('should set _sources to empty array', function () {
+      expect(sut._sources).toEqual([]);
     });
   });
 

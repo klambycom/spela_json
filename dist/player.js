@@ -66,6 +66,7 @@ var Player = (function () {
         var json = arguments[0] === undefined ? {} : arguments[0];
         this._json_data = cloneObject(json);
         this._counter = 0; // Reset counter for loaded files
+        this._sources = []; // Reset buffer sources
         this._nr_of_files = this._countFiles();
         this._loadFiles();
       },
@@ -123,6 +124,20 @@ var Player = (function () {
           return _this._playFile(x);
         });
         return true;
+      },
+      writable: true,
+      configurable: true
+    },
+    stop: {
+
+      /**
+       * @method stop
+       */
+
+      value: function stop() {
+        this._sources.forEach(function (x) {
+          return x.stop();
+        });
       },
       writable: true,
       configurable: true
@@ -199,6 +214,7 @@ var Player = (function () {
         source.buffer = soundCache[file.file];
         source.connect(this._context.destination);
         source.start(file.start);
+        this._sources.push(source);
       },
       writable: true,
       configurable: true

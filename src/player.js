@@ -49,6 +49,7 @@ class Player {
   setJSON(json = {}) {
     this._json_data = cloneObject(json);
     this._counter = 0; // Reset counter for loaded files
+    this._sources = []; // Reset buffer sources
     this._nr_of_files = this._countFiles();
     this._loadFiles();
   }
@@ -89,6 +90,14 @@ class Player {
 
     this._files().forEach(x => this._playFile(x));
     return true;
+  }
+
+  /**
+   * @method stop
+   */
+
+  stop() {
+    this._sources.forEach(x => x.stop());
   }
 
   /**
@@ -142,6 +151,7 @@ class Player {
     source.buffer = soundCache[file.file];
     source.connect(this._context.destination);
     source.start(file.start);
+    this._sources.push(source);
   }
 
   /*!

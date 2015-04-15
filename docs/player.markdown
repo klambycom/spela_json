@@ -33,6 +33,8 @@ Get the JSON.
 
 ## play()
 
+## stop()
+
 ## ready()
 
 ### Return:
