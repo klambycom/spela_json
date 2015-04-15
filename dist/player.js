@@ -10,9 +10,20 @@ var _classCallCheck = function (instance, Constructor) { if (!(instance instance
 
 /*! */
 
-var context = new AudioContext();
+// Create a copy of JSON
 var cloneObject = function (json) {
   return JSON.parse(JSON.stringify(json));
+};
+
+// Load sound from file
+var loadSound = function (context, url, callback) {
+  var req = new XMLHttpRequest();
+  req.open("GET", url, true);
+  req.responseType = "arraybuffer";
+  req.addEventListener("load", function () {
+    context.decodeAudioData(req.response, callback);
+  });
+  req.send();
 };
 
 var Player = (function () {
@@ -23,8 +34,10 @@ var Player = (function () {
 
   function Player() {
     var json = arguments[0] === undefined ? {} : arguments[0];
+    var context = arguments[1] === undefined ? new AudioContext() : arguments[1];
     _classCallCheck(this, Player);
 
+    this._context = context;
     this.setJSON(json);
   }
 
@@ -41,6 +54,7 @@ var Player = (function () {
       value: function setJSON() {
         var json = arguments[0] === undefined ? {} : arguments[0];
         this.json_data = cloneObject(json);
+        this._counter = 0;
       },
       writable: true,
       configurable: true
@@ -93,6 +107,17 @@ var Player = (function () {
       },
       writable: true,
       configurable: true
+    },
+    ready: {
+
+      /**
+       * @method ready
+       * @return {Boolean} true if all files are loaded
+       */
+
+      value: function ready() {},
+      writable: true,
+      configurable: true
     }
   });
 
@@ -100,3 +125,4 @@ var Player = (function () {
 })();
 
 module.exports = Player;
+// TODO!

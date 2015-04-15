@@ -4,8 +4,19 @@
 
 /*! */
 
-let context = new AudioContext();
+// Create a copy of JSON
 let cloneObject = json => JSON.parse(JSON.stringify(json));
+
+// Load sound from file
+let loadSound = function (context, url, callback) {
+  let req = new XMLHttpRequest();
+  req.open('GET', url, true);
+  req.responseType = 'arraybuffer';
+  req.addEventListener('load', function () {
+    context.decodeAudioData(req.response, callback);
+  });
+  req.send();
+};
 
 class Player {
 
@@ -14,7 +25,8 @@ class Player {
    * @param {Object} json The audio json
    */
 
-  constructor(json = {}) {
+  constructor(json = {}, context = new AudioContext()) {
+    this._context = context;
     this.setJSON(json);
   }
 
@@ -27,6 +39,7 @@ class Player {
 
   setJSON(json = {}) {
     this.json_data = cloneObject(json);
+    this._counter = 0;
   }
 
   /**
@@ -53,6 +66,7 @@ class Player {
    */
 
   getDuration() {
+    // TODO!
   }
 
   /**
@@ -61,6 +75,14 @@ class Player {
 
   play() {
     console.log('play');
+  }
+
+  /**
+   * @method ready
+   * @return {Boolean} true if all files are loaded
+   */
+
+  ready() {
   }
 }
 

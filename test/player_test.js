@@ -1,5 +1,11 @@
 var Player = require('../dist/player.js');
 
+//// For tests run using node
+//if (typeof AudioContext === 'undefined') {
+//  global.AudioContext = function () {};
+//}
+
+
 describe('Player', function () {
   var sut, data;
 
@@ -64,6 +70,10 @@ describe('Player', function () {
       json.name = 'jesse';
       expect(sut.getJSON()).toEqual({ name: 'walt' });
     });
+
+    it('should reset loaded files counter', function () {
+      expect(sut._counter).toEqual(0);
+    });
   });
 
   describe('#getName', function () {
@@ -79,6 +89,12 @@ describe('Player', function () {
   describe('#getDuration', function () {
     it('should be defined', function () {
       expect(sut.getDuration).toBeDefined();
+    });
+  });
+
+  describe('#ready', function () {
+    it('should be defined', function () {
+      expect(sut.ready).toBeDefined();
     });
   });
 });

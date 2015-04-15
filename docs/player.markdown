@@ -32,5 +32,11 @@ Get the JSON.
 
 ## play()
 
+## ready()
+
+### Return:
+
+* **Boolean** true if all files are loaded
+
 <!-- End src/player.js -->
 
