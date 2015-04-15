@@ -25,22 +25,22 @@ describe('Player', function () {
         '2': {
           type: 'file',
           file: '/car.wav',
-          start: 0
+          start: 1.5
         },
         '3': {
           type: 'file',
           file: '/crumple_paper.wav',
-          start: 0
+          start: 3
         },
         '4': {
           type: 'file',
           file: '/mbira.wav',
-          start: 0
+          start: 5
         },
         '5': {
           type: 'file',
           file: '/surround.wav',
-          start: 0
+          start: 3
         }
       }
     };
@@ -52,6 +52,10 @@ describe('Player', function () {
 
   it('should have a play-function', function () {
     expect(sut.play).toBeDefined();
+  });
+
+  it('should have a _countFiles-function', function () {
+    expect(sut._countFiles()).toEqual(5);
   });
 
   describe('#constructor', function () {

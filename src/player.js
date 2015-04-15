@@ -85,12 +85,7 @@ class Player {
    */
 
   play() {
-    Object
-      .keys(this._json_data.data)
-      .filter(this._isFile.bind(this))
-      .forEach(x => {
-        this._playFile(this._json_data.data[x]);
-      });
+    this._files().forEach(x => this._playFile(x));
   }
 
   /**
@@ -118,14 +113,9 @@ class Player {
    */
 
   _loadFiles() {
-    let load = x => {
-      loadSound(this._context, () => this._counter += 1, this._json_data.data[x].file);
-    };
-
-    Object
-      .keys(this._json_data.data)
-      .filter(this._isFile.bind(this))
-      .forEach(load);
+    this._files().forEach(x => {
+      loadSound(this._context, () => this._counter += 1, x.file);
+    });
   }
 
   /*!
@@ -136,10 +126,7 @@ class Player {
    */
 
   _countFiles() {
-    return Object
-      .keys(this._json_data.data)
-      .filter(this._isFile.bind(this))
-      .length;
+    return this._files().length;
   }
 
   /*!
@@ -151,7 +138,19 @@ class Player {
     let source = this._context.createBufferSource();
     source.buffer = soundCache[file.file];
     source.connect(this._context.destination);
-    source.start(0);
+    source.start(file.start);
+  }
+
+  /*!
+   * @method _files
+   * @return {Array} all files only
+   */
+
+  _files() {
+    return Object
+      .keys(this._json_data.data)
+      .filter(this._isFile.bind(this))
+      .map(x => this._json_data.data[x]);
   }
 }
 

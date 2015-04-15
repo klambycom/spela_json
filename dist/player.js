@@ -117,8 +117,8 @@ var Player = (function () {
 
       value: function play() {
         var _this = this;
-        Object.keys(this._json_data.data).filter(this._isFile.bind(this)).forEach(function (x) {
-          _this._playFile(_this._json_data.data[x]);
+        this._files().forEach(function (x) {
+          return _this._playFile(x);
         });
       },
       writable: true,
@@ -160,13 +160,11 @@ var Player = (function () {
 
       value: function _loadFiles() {
         var _this = this;
-        var load = function (x) {
+        this._files().forEach(function (x) {
           loadSound(_this._context, function () {
             return _this._counter += 1;
-          }, _this._json_data.data[x].file);
-        };
-
-        Object.keys(this._json_data.data).filter(this._isFile.bind(this)).forEach(load);
+          }, x.file);
+        });
       },
       writable: true,
       configurable: true
@@ -181,7 +179,7 @@ var Player = (function () {
        */
 
       value: function _countFiles() {
-        return Object.keys(this._json_data.data).filter(this._isFile.bind(this)).length;
+        return this._files().length;
       },
       writable: true,
       configurable: true
@@ -197,7 +195,23 @@ var Player = (function () {
         var source = this._context.createBufferSource();
         source.buffer = soundCache[file.file];
         source.connect(this._context.destination);
-        source.start(0);
+        source.start(file.start);
+      },
+      writable: true,
+      configurable: true
+    },
+    _files: {
+
+      /*!
+       * @method _files
+       * @return {Array} all files only
+       */
+
+      value: function _files() {
+        var _this = this;
+        return Object.keys(this._json_data.data).filter(this._isFile.bind(this)).map(function (x) {
+          return _this._json_data.data[x];
+        });
       },
       writable: true,
       configurable: true
