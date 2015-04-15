@@ -4,11 +4,12 @@
 
 # Player
 
-## constructor(json)
+## constructor(json, context)
 
 ### Params:
 
 * **Object** *json* The audio json
+* **AudioContext** *context* 
 
 ## setJSON(json)
 

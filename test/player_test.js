@@ -1,10 +1,14 @@
-var Player = require('../dist/player.js');
+var rewire = require('rewire');
+var Player = rewire('../dist/player.js');
 
-//// For tests run using node
-//if (typeof AudioContext === 'undefined') {
-//  global.AudioContext = function () {};
-//}
-
+global.AudioContext = function () {};
+global.XMLHttpRequest = function () {
+  return {
+    open: function () {},
+    send: function () {},
+    addEventListener: function () {}
+  };
+};
 
 describe('Player', function () {
   var sut, data, dataCopy;
@@ -108,6 +112,13 @@ describe('Player', function () {
     it('should count nr of files', function () {
       sut.setJSON(data);
       expect(sut._nr_of_files).toEqual(5);
+    });
+
+    it('should call loadSound for each file', function () {
+      var counter = 0;
+      Player.__set__('loadSound', function () { counter += 1; });
+      sut.setJSON(data);
+      expect(counter).toEqual(5);
     });
   });
 

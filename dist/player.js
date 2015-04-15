@@ -17,9 +17,9 @@ var cloneObject = function (json) {
 
 // Load sound from file
 var soundCache = {};
-var loadSound = function (context, url, callback) {
+var loadSound = function (context, fn, url) {
   if (soundCache[url]) {
-    callback(soundCache[url]);
+    fn(soundCache[url]);
   } else {
     (function () {
       var req = new XMLHttpRequest();
@@ -28,7 +28,7 @@ var loadSound = function (context, url, callback) {
       req.addEventListener("load", function () {
         context.decodeAudioData(req.response, function (buffer) {
           soundCache[url] = buffer;
-          callback(buffer);
+          fn(buffer);
         });
       });
       req.send();
@@ -40,6 +40,7 @@ var Player = (function () {
   /**
    * @method constructor
    * @param {Object} json The audio json
+   * @param {AudioContext} context
    */
 
   function Player() {
@@ -62,14 +63,24 @@ var Player = (function () {
        */
 
       value: function setJSON() {
+        var _this = this;
         var json = arguments[0] === undefined ? {} : arguments[0];
+        var isFile = function (x) {
+          return json.data[x].type === "file";
+        };
+
         this._json_data = cloneObject(json);
         // Reset counter for loaded files
         this._counter = 0;
         // Update counter for nr of files
-        this._nr_of_files = Object.keys(json.data).filter(function (x) {
-          return json.data[x].type === "file";
-        }).length;
+        this._nr_of_files = Object.keys(json.data).filter(isFile).length;
+        // Load all files
+        var updateCounter = function () {
+          return _this._counter += 1;
+        };
+        Object.keys(json.data).filter(isFile).forEach(function (x) {
+          return loadSound(_this._context, updateCounter, x.file);
+        });
       },
       writable: true,
       configurable: true
