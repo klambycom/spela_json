@@ -3,11 +3,14 @@ var to5 = require('gulp-6to5');
 var browserify = require('gulp-browserify');
 var markdox = require('gulp-markdox');
 var rename = require('gulp-rename');
+var jasmine = require('gulp-jasmine');
+var jshint = require('gulp-jshint');
 
 var paths = {
-  js:   'src/**/*.js',
-  dist: 'dist',
-  docs: 'docs',
+  js:    'src/**/*.js',
+  dist:  'dist',
+  docs:  'docs',
+  tests: 'test/**/*_test.js',
   example: {
     html: 'example.html',
     js:   'example.js',
@@ -37,6 +40,22 @@ gulp.task('docs', function () {
     .pipe(markdox())
     .pipe(rename({ extname: '.markdown' }))
     .pipe(gulp.dest(paths.docs));
+});
+
+gulp.task('jasmine', function () {
+  return gulp.src(paths.tests)
+    .pipe(jasmine());
+});
+
+gulp.task('watch:test', function () {
+  gulp.watch([paths.js, paths.tests], ['jasmine']);
+});
+
+gulp.task('lint', function () {
+  return gulp.src(paths.js)
+    .pipe(jshint())
+    .pipe(jshint.reporter('jshint-stylish'))
+    .pipe(jshint.reporter('fail'));
 });
 
 gulp.task('watch', function () {
