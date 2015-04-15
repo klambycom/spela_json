@@ -8,14 +8,22 @@
 let cloneObject = json => JSON.parse(JSON.stringify(json));
 
 // Load sound from file
+let soundCache = {};
 let loadSound = function (context, url, callback) {
-  let req = new XMLHttpRequest();
-  req.open('GET', url, true);
-  req.responseType = 'arraybuffer';
-  req.addEventListener('load', function () {
-    context.decodeAudioData(req.response, callback);
-  });
-  req.send();
+  if (soundCache[url]) {
+    callback(soundCache[url]);
+  } else {
+    let req = new XMLHttpRequest();
+    req.open('GET', url, true);
+    req.responseType = 'arraybuffer';
+    req.addEventListener('load', function () {
+      context.decodeAudioData(req.response, function (buffer) {
+        soundCache[url] = buffer;
+        callback(buffer);
+      });
+    });
+    req.send();
+  }
 };
 
 class Player {

@@ -7,12 +7,21 @@ var Player = require('../dist/player.js');
 
 
 describe('Player', function () {
-  var sut, data;
+  var sut, data, dataCopy;
 
   beforeEach(function () {
     data = {
-      name: 'audiofile1'
+      name: 'audiofile1',
+      data: {
+        '1': {
+          type: 'file',
+          file: '',
+          start: 0
+        }
+      }
     };
+
+    dataCopy = JSON.parse(JSON.stringify(data));
 
     sut = new Player(data);
   });
@@ -23,12 +32,12 @@ describe('Player', function () {
 
   describe('#constructor', function () {
     it('shuld take JSON as input to constructor', function () {
-      expect(sut._json_data).toEqual({ name: 'audiofile1' });
+      expect(sut._json_data).toEqual(dataCopy);
     });
 
     it('shuld copy the JSON', function () {
       data.name = 'af1';
-      expect(sut._json_data).toEqual({ name: 'audiofile1' });
+      expect(sut._json_data).toEqual(dataCopy);
     });
   });
 

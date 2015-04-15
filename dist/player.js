@@ -16,14 +16,24 @@ var cloneObject = function (json) {
 };
 
 // Load sound from file
+var soundCache = {};
 var loadSound = function (context, url, callback) {
-  var req = new XMLHttpRequest();
-  req.open("GET", url, true);
-  req.responseType = "arraybuffer";
-  req.addEventListener("load", function () {
-    context.decodeAudioData(req.response, callback);
-  });
-  req.send();
+  if (soundCache[url]) {
+    callback(soundCache[url]);
+  } else {
+    (function () {
+      var req = new XMLHttpRequest();
+      req.open("GET", url, true);
+      req.responseType = "arraybuffer";
+      req.addEventListener("load", function () {
+        context.decodeAudioData(req.response, function (buffer) {
+          soundCache[url] = buffer;
+          callback(buffer);
+        });
+      });
+      req.send();
+    })();
+  }
 };
 
 var Player = (function () {
