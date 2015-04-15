@@ -61,6 +61,7 @@ gulp.task('lint', function () {
 gulp.task('watch', function () {
   gulp.watch(paths.js, ['6to5', 'example', 'docs']);
   gulp.watch(paths.example.js, ['example']);
+  gulp.watch(paths.js, ['docs']);
 });
 
 gulp.task('example', ['example:browserify', 'example:html']);

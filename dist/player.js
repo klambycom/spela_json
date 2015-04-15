@@ -4,11 +4,22 @@ var _prototypeProperties = function (child, staticProps, instanceProps) { if (st
 
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
+/**
+ * # Player
+ */
+
+/*! */
+
 var cloneObject = function (json) {
   return JSON.parse(JSON.stringify(json));
 };
 
 var Player = (function () {
+  /**
+   * @method constructor
+   * @param {Object} json The audio json
+   */
+
   function Player() {
     var json = arguments[0] === undefined ? {} : arguments[0];
     _classCallCheck(this, Player);
@@ -18,6 +29,14 @@ var Player = (function () {
 
   _prototypeProperties(Player, null, {
     setJSON: {
+
+      /**
+       * Update JSON.
+       *
+       * @method setJSON
+       * @param {Object} json The audio json
+       */
+
       value: function setJSON() {
         var json = arguments[0] === undefined ? {} : arguments[0];
         this.json_data = cloneObject(json);
@@ -26,6 +45,14 @@ var Player = (function () {
       configurable: true
     },
     getJSON: {
+
+      /**
+       * Get the JSON.
+       *
+       * @method getJSON
+       * @return {Object} json The audio json
+       */
+
       value: function getJSON() {
         return cloneObject(this.json_data);
       },
@@ -33,6 +60,11 @@ var Player = (function () {
       configurable: true
     },
     play: {
+
+      /**
+       * @method play
+       */
+
       value: function play() {
         console.log("play");
       },
