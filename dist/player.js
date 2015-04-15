@@ -63,24 +63,11 @@ var Player = (function () {
        */
 
       value: function setJSON() {
-        var _this = this;
         var json = arguments[0] === undefined ? {} : arguments[0];
-        var isFile = function (x) {
-          return json.data[x].type === "file";
-        };
-
         this._json_data = cloneObject(json);
-        // Reset counter for loaded files
-        this._counter = 0;
-        // Update counter for nr of files
-        this._nr_of_files = Object.keys(json.data).filter(isFile).length;
-        // Load all files
-        var updateCounter = function () {
-          return _this._counter += 1;
-        };
-        Object.keys(json.data).filter(isFile).forEach(function (x) {
-          return loadSound(_this._context, updateCounter, x.file);
-        });
+        this._counter = 0; // Reset counter for loaded files
+        this._nr_of_files = this._countFiles();
+        this._loadFiles();
       },
       writable: true,
       configurable: true
@@ -143,6 +130,58 @@ var Player = (function () {
 
       value: function ready() {
         return this._counter === this._nr_of_files;
+      },
+      writable: true,
+      configurable: true
+    },
+    _isFile: {
+
+      /*!
+       * @method _isFile
+       * @return {Boolean} true if it's a file
+       */
+
+      value: function _isFile(x) {
+        return this._json_data.data[x].type === "file";
+      },
+      writable: true,
+      configurable: true
+    },
+    _loadFiles: {
+
+      /*!
+       * Load all files
+       *
+       * @method _loadFiles
+       */
+
+      value: function _loadFiles() {
+        var _this = this;
+        var load = function (x) {
+          var updateCounter = function (buffer) {
+            _this._counter += 1;
+            _this._json_data.data[x].buffer = buffer;
+          };
+
+          return loadSound(_this._context, updateCounter, _this._json_data.data[x].file);
+        };
+
+        Object.keys(this._json_data.data).filter(this._isFile.bind(this)).forEach(load);
+      },
+      writable: true,
+      configurable: true
+    },
+    _countFiles: {
+
+      /*!
+       * Update counter for nr of files
+       *
+       * @method _countFiles
+       * @return {Number} nr of files in the JSON
+       */
+
+      value: function _countFiles() {
+        return Object.keys(this._json_data.data).filter(this._isFile.bind(this)).length;
       },
       writable: true,
       configurable: true

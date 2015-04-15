@@ -113,15 +113,19 @@ class Player {
    */
 
   _loadFiles() {
-    var load = x => {
-      let updateCounter = () => this._counter += 1;
-      return loadSound(this._context, updateCounter, x.file);
+    let load = x => {
+      let updateCounter = (buffer) => {
+        this._counter += 1;
+        this._json_data.data[x].buffer = buffer;
+      };
+
+      return loadSound(this._context, updateCounter, this._json_data.data[x].file);
     };
 
     Object
       .keys(this._json_data.data)
-      .filter(this._isFile)
-      .forEach(this._loadFile);
+      .filter(this._isFile.bind(this))
+      .forEach(load);
   }
 
   /*!
@@ -132,7 +136,10 @@ class Player {
    */
 
   _countFiles() {
-    return Object.keys(this._json_data.data).filter(this._isFile).length;
+    return Object
+      .keys(this._json_data.data)
+      .filter(this._isFile.bind(this))
+      .length;
   }
 }
 
