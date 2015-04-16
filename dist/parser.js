@@ -1,12 +1,13 @@
 "use strict";
 
 module.exports = function (context) {
+  var soundCache = {};
   var files = [];
   var nr_of_loaded_files = 0;
   var duration = 0;
+  var builder = require("./builder")(context, soundCache);
 
   // Load sound from file
-  var soundCache = {};
   var loadSound = function (context, fn, url) {
     if (soundCache[url]) {
       fn(soundCache[url]);
@@ -26,34 +27,6 @@ module.exports = function (context) {
     }
   };
 
-  // Start playing on right position
-  var playStart = function (source, file) {
-    source.connect(context.destination);
-    source.start(file.start);
-  };
-
-  // Change play rate
-  var playRate = function (source, file) {
-    if (typeof file.rate !== "undefined") {
-      source.playbackRate.value = file.rate;
-    }
-  };
-
-  // Start build source
-  var buildSource = function (file) {
-    // Create source
-    var source = context.createBufferSource();
-    source.buffer = soundCache[file.file];
-
-    // Choose play rate
-    playRate(source, file);
-
-    // Choose where to start playing
-    playStart(source, file);
-
-    return source;
-  };
-
   // Test if key is file
   var isFile = function (json) {
     return function (key) {
@@ -68,44 +41,9 @@ module.exports = function (context) {
     });
   };
 
-  // Returned object from parse
-  var fns = {
-
-    /**
-     * @method play
-     * @return {Array} all buffer sources
-     */
-
-    play: function play() {
-      return files.map(function (x) {
-        return buildSource(x);
-      });
-    },
-
-    /**
-     * Array containing all files
-     *
-     * @name files
-     */
-
-    files: files,
-
-    /**
-     * Duration of the whole file in seconds
-     *
-     * @name duration
-     */
-
-    duration: duration,
-
-    /**
-     * @method ready
-     * @return {Boolean} true if all files are loaded
-     */
-
-    ready: function ready() {
-      return nr_of_loaded_files === files.length;
-    }
+  // Check if all files are loaded
+  var ready = function () {
+    return nr_of_loaded_files === files.length;
   };
 
   return {
@@ -138,7 +76,9 @@ module.exports = function (context) {
         }, x.file);
       });
 
-      return fns;
+      return builder(files, function () {
+        return duration;
+      }, ready);
     },
 
     /**

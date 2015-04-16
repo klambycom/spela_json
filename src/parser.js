@@ -1,10 +1,11 @@
 module.exports = function (context) {
+  let soundCache = {};
   let files = [];
   let nr_of_loaded_files = 0;
   let duration = 0;
+  let builder = require('./builder')(context, soundCache);
 
   // Load sound from file
-  let soundCache = {};
   let loadSound = function (context, fn, url) {
     if (soundCache[url]) {
       fn(soundCache[url]);
@@ -22,34 +23,6 @@ module.exports = function (context) {
     }
   };
 
-  // Start playing on right position
-  let playStart = function (source, file) {
-    source.connect(context.destination);
-    source.start(file.start);
-  };
-
-  // Change play rate
-  let playRate = function (source, file) {
-    if (typeof file.rate !== 'undefined') {
-      source.playbackRate.value = file.rate;
-    }
-  };
-
-  // Start build source
-  let buildSource = function (file) {
-    // Create source
-    let source = context.createBufferSource();
-    source.buffer = soundCache[file.file];
-
-    // Choose play rate
-    playRate(source, file);
-
-    // Choose where to start playing
-    playStart(source, file);
-
-    return source;
-  };
-
   // Test if key is file
   let isFile = function (json) {
     return (key) => json.data[key].type === 'file';
@@ -63,42 +36,9 @@ module.exports = function (context) {
       .map(x => json.data[x]);
   };
 
-  // Returned object from parse
-  let fns = {
-
-    /**
-     * @method play
-     * @return {Array} all buffer sources
-     */
-
-    play() {
-      return files.map(x => buildSource(x));
-    },
-
-    /**
-     * Array containing all files
-     *
-     * @name files
-     */
-
-    files,
-
-    /**
-     * Duration of the whole file in seconds
-     *
-     * @name duration
-     */
-
-    duration,
-
-    /**
-     * @method ready
-     * @return {Boolean} true if all files are loaded
-     */
-
-    ready() {
-      return nr_of_loaded_files === files.length;
-    }
+  // Check if all files are loaded
+  let ready = function () {
+    return nr_of_loaded_files === files.length;
   };
 
   return {
@@ -129,7 +69,7 @@ module.exports = function (context) {
         }, x.file);
       });
 
-      return fns;
+      return builder(files, () => duration, ready);
     },
 
     /**

@@ -107,7 +107,7 @@ var Player = (function () {
         if (!this.ready()) {
           return 0;
         }
-        return this._parsed.duration;
+        return this._parsed.duration();
       },
       writable: true,
       configurable: true

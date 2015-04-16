@@ -69,7 +69,7 @@ class Player {
 
   duration() {
     if (!this.ready()) { return 0; }
-    return this._parsed.duration;
+    return this._parsed.duration();
   }
 
   /**
