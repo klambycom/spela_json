@@ -22,7 +22,6 @@
     "gulp-markdox": "^0.1.1",
     "gulp-rename": "^1.2.0",
     "jshint-stylish": "^1.0.1",
-    "rewire": "^2.3.1",
-    "sinon": "^1.14.1"
+    "rewire": "^2.3.1"
   }
 }
