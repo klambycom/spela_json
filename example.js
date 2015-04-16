@@ -21,12 +21,14 @@ let file = {
     '4': {
       type: 'file',
       file: '/mbira.wav',
-      start: 5
+      start: 5,
+      rate: 4
     },
     '5': {
       type: 'file',
       file: '/surround.wav',
-      start: 10
+      start: 10,
+      rate: 3
     }
   }
 };

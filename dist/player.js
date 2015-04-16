@@ -45,7 +45,7 @@ var Player = (function () {
 
   function Player() {
     var json = arguments[0] === undefined ? {} : arguments[0];
-    var context = arguments[1] === undefined ? new AudioContext() : arguments[1];
+    var context = arguments[1] === undefined ? new (AudioContext || webkitAudioContext)() : arguments[1];
     _classCallCheck(this, Player);
 
     this._context = context;
@@ -215,11 +215,33 @@ var Player = (function () {
        */
 
       value: function _playFile(file) {
+        // Create source
         var source = this._context.createBufferSource();
         source.buffer = soundCache[file.file];
+        this._sources.push(source); // Remember source, so it can be stopped
+
+        // Choose play rate
+        this._playRate(source, file);
+
+        // Choose where to start playing
+        this._playStart(source, file);
+      },
+      writable: true,
+      configurable: true
+    },
+    _playStart: {
+      value: function _playStart(source, file) {
         source.connect(this._context.destination);
         source.start(file.start);
-        this._sources.push(source);
+      },
+      writable: true,
+      configurable: true
+    },
+    _playRate: {
+      value: function _playRate(source, file) {
+        if (typeof file.rate !== "undefined") {
+          source.playbackRate.value = file.rate;
+        }
       },
       writable: true,
       configurable: true

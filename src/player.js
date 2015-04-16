@@ -34,7 +34,7 @@ class Player {
    * @param {AudioContext} context
    */
 
-  constructor(json = {}, context = new AudioContext()) {
+  constructor(json = {}, context = new (AudioContext || webkitAudioContext)()) {
     this._context = context;
     this.setJSON(json);
   }
@@ -150,11 +150,27 @@ class Player {
    */
 
   _playFile(file) {
+    // Create source
     let source = this._context.createBufferSource();
     source.buffer = soundCache[file.file];
+    this._sources.push(source); // Remember source, so it can be stopped
+
+    // Choose play rate
+    this._playRate(source, file);
+
+    // Choose where to start playing
+    this._playStart(source, file);
+  }
+
+  _playStart(source, file) {
     source.connect(this._context.destination);
     source.start(file.start);
-    this._sources.push(source);
+  }
+
+  _playRate(source, file) {
+    if (typeof file.rate !== 'undefined') {
+      source.playbackRate.value = file.rate;
+    }
   }
 
   /*!
