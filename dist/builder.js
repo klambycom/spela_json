@@ -1,5 +1,22 @@
 "use strict";
 
+/**
+ * # builder(context, cache)
+ *
+ *
+ * ### Params:
+ *
+ * * **AudioContext** *context*
+ * * **Object** *cache* cached files
+ *
+ *
+ * ### Return:
+ *
+ * * **Function** function with params files, duration and ready
+ */
+
+/*! */
+
 module.exports = function (context, cache) {
   // Start playing on right position
   var playStart = function (source, file) {

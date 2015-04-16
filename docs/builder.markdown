@@ -2,6 +2,17 @@
 
 <!-- Start src/builder.js -->
 
+# builder(context, cache)
+
+### Params:
+
+* **AudioContext** *context*
+* **Object** *cache* cached files
+
+### Return:
+
+* **Function** function with params files, duration and ready
+
 ## play()
 
 ### Return:

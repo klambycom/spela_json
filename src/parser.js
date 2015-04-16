@@ -1,3 +1,19 @@
+/**
+ * # parser(context)
+ *
+ *
+ * ### Params:
+ *
+ * * **AudioContext** *context*
+ *
+ *
+ * ### Return:
+ *
+ * * **Object** functions for parsing audio JSON
+ */
+
+/*! */
+
 module.exports = function (context) {
   let soundCache = {};
   let files = [];

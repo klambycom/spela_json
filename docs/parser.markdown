@@ -2,6 +2,16 @@
 
 <!-- Start src/parser.js -->
 
+# parser(context)
+
+### Params:
+
+* **AudioContext** *context*
+
+### Return:
+
+* **Object** functions for parsing audio JSON
+
 ## parse(json)
 
 Parse JSON and load files
