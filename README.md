@@ -1,4 +1,4 @@
-# Ljudspelare [![Dependencies badge][david-image]][david-url] [![DevDependencies badge][david-dev-image]][david-dev-url]
+# SpelaJSON [![Dependencies badge][david-image]][david-url] [![DevDependencies badge][david-dev-image]][david-dev-url]
 
 
 ## API
