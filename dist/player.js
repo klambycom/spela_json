@@ -6,6 +6,8 @@ var _classCallCheck = function (instance, Constructor) { if (!(instance instance
 
 /**
  * # Player
+ *
+ * Plays JSON. See example.
  */
 
 /*! */
@@ -22,6 +24,9 @@ var AudioContext = window.AudioContext || window.webkitAudioContext;
 
 var Player = (function () {
   /**
+   * Create a player-object with the JSON, and optional AudioContext. The
+   * browser only allow a few number of AudioContext.
+   *
    * @method constructor
    * @param {Object} json The audio json
    * @param {AudioContext} context
@@ -41,7 +46,10 @@ var Player = (function () {
     play: {
 
       /**
+       * Plays JSON, only if ready and all files is loaded.
+       *
        * @method play
+       * @return {Boolean} true if the file can be played
        */
 
       value: function play() {
@@ -58,6 +66,8 @@ var Player = (function () {
     stop: {
 
       /**
+       * Stops playing the file.
+       *
        * @method stop
        */
 
@@ -72,6 +82,8 @@ var Player = (function () {
     ready: {
 
       /**
+       * Check if JSON-file is ready, and all files are loaded.
+       *
        * @method ready
        * @return {Boolean} true if all files are loaded
        */
@@ -88,7 +100,10 @@ var Player = (function () {
     name: {
 
       /**
+       * Name of the JSON-file.
+       *
        * @method name
+       * @return {String} name of the file
        */
 
       value: function name() {
@@ -100,7 +115,10 @@ var Player = (function () {
     duration: {
 
       /**
+       * Duration of the whole JSON-file. Returns zero of file is not ready.
+       *
        * @method duration
+       * @return {Number} length of the file
        */
 
       value: function duration() {

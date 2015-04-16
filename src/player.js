@@ -1,5 +1,7 @@
 /**
  * # Player
+ *
+ * Plays JSON. See example.
  */
 
 /*! */
@@ -15,6 +17,9 @@ let AudioContext = window.AudioContext || window.webkitAudioContext;
 class Player {
 
   /**
+   * Create a player-object with the JSON, and optional AudioContext. The
+   * browser only allow a few number of AudioContext.
+   *
    * @method constructor
    * @param {Object} json The audio json
    * @param {AudioContext} context
@@ -27,7 +32,10 @@ class Player {
   }
 
   /**
+   * Plays JSON, only if ready and all files is loaded.
+   *
    * @method play
+   * @return {Boolean} true if the file can be played
    */
 
   play() {
@@ -38,6 +46,8 @@ class Player {
   }
 
   /**
+   * Stops playing the file.
+   *
    * @method stop
    */
 
@@ -46,6 +56,8 @@ class Player {
   }
 
   /**
+   * Check if JSON-file is ready, and all files are loaded.
+   *
    * @method ready
    * @return {Boolean} true if all files are loaded
    */
@@ -56,7 +68,10 @@ class Player {
   }
 
   /**
+   * Name of the JSON-file.
+   *
    * @method name
+   * @return {String} name of the file
    */
 
   name() {
@@ -64,7 +79,10 @@ class Player {
   }
 
   /**
+   * Duration of the whole JSON-file. Returns zero of file is not ready.
+   *
    * @method duration
+   * @return {Number} length of the file
    */
 
   duration() {
