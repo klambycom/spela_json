@@ -9,6 +9,9 @@ let AJSON = require('./parser');
 // Create a copy of JSON
 let cloneObject = json => JSON.parse(JSON.stringify(json));
 
+// Stupid jshint with bad documentation, bad constructor
+let AudioContext = window.AudioContext || window.webkitAudioContext;
+
 class Player {
 
   /**
@@ -17,7 +20,7 @@ class Player {
    * @param {AudioContext} context
    */
 
-  constructor(json = {}, context = new (AudioContext || webkitAudioContext)()) {
+  constructor(json = {}, context = new AudioContext()) {
     this._context = context;
     this._AJSON = AJSON(context);
     this.setJSON(json);
@@ -28,7 +31,7 @@ class Player {
    */
 
   play() {
-    if (!this.ready()) return false;
+    if (!this.ready()) { return false; }
 
     this._sources = this._parsed.play();
     return true;
@@ -48,7 +51,7 @@ class Player {
    */
 
   ready() {
-    if (typeof this._parsed.ready === 'undefined') return false;
+    if (typeof this._parsed.ready === 'undefined') { return false; }
     return this._parsed.ready();
   }
 
@@ -65,7 +68,7 @@ class Player {
    */
 
   duration() {
-    if (!this.ready()) return 0;
+    if (!this.ready()) { return 0; }
     return this._parsed.duration;
   }
 

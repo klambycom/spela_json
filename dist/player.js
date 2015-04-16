@@ -17,6 +17,9 @@ var cloneObject = function (json) {
   return JSON.parse(JSON.stringify(json));
 };
 
+// Stupid jshint with bad documentation, bad constructor
+var AudioContext = window.AudioContext || window.webkitAudioContext;
+
 var Player = (function () {
   /**
    * @method constructor
@@ -26,7 +29,7 @@ var Player = (function () {
 
   function Player() {
     var json = arguments[0] === undefined ? {} : arguments[0];
-    var context = arguments[1] === undefined ? new (AudioContext || webkitAudioContext)() : arguments[1];
+    var context = arguments[1] === undefined ? new AudioContext() : arguments[1];
     _classCallCheck(this, Player);
 
     this._context = context;
@@ -44,7 +47,9 @@ var Player = (function () {
       value: function play() {
         if (!this.ready()) {
           return false;
-        }this._sources = this._parsed.play();
+        }
+
+        this._sources = this._parsed.play();
         return true;
       },
       writable: true,
@@ -74,7 +79,8 @@ var Player = (function () {
       value: function ready() {
         if (typeof this._parsed.ready === "undefined") {
           return false;
-        }return this._parsed.ready();
+        }
+        return this._parsed.ready();
       },
       writable: true,
       configurable: true
@@ -100,7 +106,8 @@ var Player = (function () {
       value: function duration() {
         if (!this.ready()) {
           return 0;
-        }return this._parsed.duration;
+        }
+        return this._parsed.duration;
       },
       writable: true,
       configurable: true

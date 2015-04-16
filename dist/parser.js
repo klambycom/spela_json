@@ -130,7 +130,9 @@ module.exports = function (context) {
           // Calculate duration
           // TODO Calculate rate and cuts
           var realDuration = buffer.duration + x.start;
-          if (realDuration > duration) duration = realDuration;
+          if (realDuration > duration) {
+            duration = realDuration;
+          }
           // Change nr of loaded files
           nr_of_loaded_files += 1;
         }, x.file);
