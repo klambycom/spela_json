@@ -27,17 +27,13 @@ var dot = function (key) {
 };
 
 // Helper functions
-var addError = function (errors, type, key, message) {
-  return errors.push({ type: type, key: key, message: message }) && errors;
-};
-
 var check = function (type, valid, fn) {
   return function (_x, key, data) {
     var errors = arguments[0] === undefined ? [] : arguments[0];
     if (valid(data)) {
       return errors;
     }
-    return addError(errors, type, key, fn(data));
+    return errors.push({ type: type, key: key, message: fn(data) }) && errors;
   };
 };
 

@@ -13,14 +13,10 @@ let eq = x => y => x === y;
 let dot = key => obj => obj[key];
 
 // Helper functions
-let addError = (errors, type, key, message) => {
-  return errors.push({ type, key, message }) && errors;
-};
-
 let check = (type, valid, fn) => {
   return (errors = [], key, data) => {
     if (valid(data)) { return errors; }
-    return addError(errors, type, key, fn(data));
+    return errors.push({ type, key, message: fn(data) }) && errors;
   };
 };
 
