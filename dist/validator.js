@@ -1,28 +1,58 @@
 "use strict";
 
+// Functionl functions
+var compose = function () {
+  for (var _len = arguments.length, fns = Array(_len), _key = 0; _key < _len; _key++) {
+    fns[_key] = arguments[_key];
+  }
+
+  return function (result) {
+    for (var i = fns.length - 1; i > -1; i--) {
+      result = fns[i].call(undefined, result);
+    }
+
+    return result;
+  };
+};
+
+var eq = function (x) {
+  return function (y) {
+    return x === y;
+  };
+};
+var dot = function (key) {
+  return function (obj) {
+    return obj[key];
+  };
+};
+
+// Helper functions
 var addError = function (errors, type, key, message) {
   return errors.push({ type: type, key: key, message: message }) && errors;
+};
+
+var check = function (type, valid, fn) {
+  return function (_x, key, data) {
+    var errors = arguments[0] === undefined ? [] : arguments[0];
+    if (valid(data)) {
+      return errors;
+    }
+    return addError(errors, type, key, fn(data));
+  };
 };
 
 var isUndefined = function (x) {
   return typeof x === "undefined" || x === null || x === "";
 };
 
+// Validation
 var validate = {
-  type: function type(_x, key, data) {
-    var errors = arguments[0] === undefined ? [] : arguments[0];
-    if (data.type === "file") {
-      return errors;
-    }
-
-    var message = "\"" + data.type + "\" is not a valid type";
-
+  type: check("type", compose(eq("file"), dot("type")), function (data) {
     if (isUndefined(data.type)) {
-      message = "type must be defined";
+      return "type must be defined";
     }
-
-    return addError(errors, "type", key, message);
-  },
+    return "\"" + data.type + "\" is not a valid type";
+  }),
 
   start: function (_x, data) {
     var errors = arguments[0] === undefined ? [] : arguments[0];
