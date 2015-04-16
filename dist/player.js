@@ -10,30 +10,11 @@ var _classCallCheck = function (instance, Constructor) { if (!(instance instance
 
 /*! */
 
+var AJSON = require("./parser");
+
 // Create a copy of JSON
 var cloneObject = function (json) {
   return JSON.parse(JSON.stringify(json));
-};
-
-// Load sound from file
-var soundCache = {};
-var loadSound = function (context, fn, url) {
-  if (soundCache[url]) {
-    fn(soundCache[url]);
-  } else {
-    (function () {
-      var req = new XMLHttpRequest();
-      req.open("GET", url, true);
-      req.responseType = "arraybuffer";
-      req.addEventListener("load", function () {
-        context.decodeAudioData(req.response, function (buffer) {
-          soundCache[url] = buffer;
-          fn(buffer);
-        });
-      });
-      req.send();
-    })();
-  }
 };
 
 var Player = (function () {
@@ -49,6 +30,7 @@ var Player = (function () {
     _classCallCheck(this, Player);
 
     this._context = context;
+    this._AJSON = AJSON(context);
     this.setJSON(json);
   }
 
@@ -60,12 +42,9 @@ var Player = (function () {
        */
 
       value: function play() {
-        var _this = this;
         if (!this.ready()) {
           return false;
-        }this._files().forEach(function (x) {
-          return _this._playFile(x);
-        });
+        }this._sources = this._parsed.play();
         return true;
       },
       writable: true,
@@ -93,7 +72,9 @@ var Player = (function () {
        */
 
       value: function ready() {
-        return this._counter === this._nr_of_files;
+        if (typeof this._parsed.ready === "undefined") {
+          return false;
+        }return this._parsed.ready();
       },
       writable: true,
       configurable: true
@@ -117,10 +98,9 @@ var Player = (function () {
        */
 
       value: function duration() {
-        return this._files().reduce(function (acc, x) {
-          var dur = x.start + soundCache[x.file].duration;
-          return dur > acc ? dur : acc;
-        }, 0);
+        if (!this.ready()) {
+          return 0;
+        }return this._parsed.duration;
       },
       writable: true,
       configurable: true
@@ -137,10 +117,8 @@ var Player = (function () {
       value: function setJSON() {
         var json = arguments[0] === undefined ? {} : arguments[0];
         this._json_data = cloneObject(json);
-        this._counter = 0; // Reset counter for loaded files
         this._sources = []; // Reset buffer sources
-        this._nr_of_files = this._countFiles();
-        this._loadFiles();
+        this._parsed = this._AJSON.parse(json);
       },
       writable: true,
       configurable: true
@@ -156,108 +134,6 @@ var Player = (function () {
 
       value: function getJSON() {
         return cloneObject(this._json_data);
-      },
-      writable: true,
-      configurable: true
-    },
-    _isFile: {
-
-      /*!
-       * @method _isFile
-       * @return {Boolean} true if it's a file
-       */
-
-      value: function _isFile(x) {
-        return this._json_data.data[x].type === "file";
-      },
-      writable: true,
-      configurable: true
-    },
-    _loadFiles: {
-
-      /*!
-       * Load all files
-       *
-       * @method _loadFiles
-       */
-
-      value: function _loadFiles() {
-        var _this = this;
-        this._files().forEach(function (x) {
-          loadSound(_this._context, function () {
-            return _this._counter += 1;
-          }, x.file);
-        });
-      },
-      writable: true,
-      configurable: true
-    },
-    _countFiles: {
-
-      /*!
-       * Update counter for nr of files
-       *
-       * @method _countFiles
-       * @return {Number} nr of files in the JSON
-       */
-
-      value: function _countFiles() {
-        return this._files().length;
-      },
-      writable: true,
-      configurable: true
-    },
-    _playFile: {
-
-      /*!
-       * @method _playFile
-       * @param {Object} file
-       */
-
-      value: function _playFile(file) {
-        // Create source
-        var source = this._context.createBufferSource();
-        source.buffer = soundCache[file.file];
-        this._sources.push(source); // Remember source, so it can be stopped
-
-        // Choose play rate
-        this._playRate(source, file);
-
-        // Choose where to start playing
-        this._playStart(source, file);
-      },
-      writable: true,
-      configurable: true
-    },
-    _playStart: {
-      value: function _playStart(source, file) {
-        source.connect(this._context.destination);
-        source.start(file.start);
-      },
-      writable: true,
-      configurable: true
-    },
-    _playRate: {
-      value: function _playRate(source, file) {
-        if (typeof file.rate !== "undefined") {
-          source.playbackRate.value = file.rate;
-        }
-      },
-      writable: true,
-      configurable: true
-    },
-    _files: {
-
-      /*!
-       * @method _files
-       * @return {Array} all files only
-       */
-
-      value: function _files() {
-        var _this = this;
-        return Object.keys(this._json_data.data).filter(this._isFile.bind(this)).map(function (x) {
-          return _this._json_data.data[x];
-        });
       },
       writable: true,
       configurable: true
