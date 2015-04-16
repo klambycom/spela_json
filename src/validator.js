@@ -1,16 +1,20 @@
-let isUndefined = (x) => typeof x === 'undefined' || x === null || x === '';
+let addError = (errors, type, key, message) => {
+  return errors.push({ type, key, message }) && errors;
+};
+
+let isUndefined = x => typeof x === 'undefined' || x === null || x === '';
 
 let validate = {
   type(errors = [], key, data) {
     if (data.type === 'file') { return errors; }
 
+    let message = '"' + data.type + '" is not a valid type';
+
     if (isUndefined(data.type)) {
-      errors.push({ type: 'type', key: key, message: 'type must be defined' });
-    } else {
-      errors.push({ type: 'type', key: key, message: '"' + data.type + '" is not a valid type' });
+      message = 'type must be defined';
     }
 
-    return errors;
+    return addError(errors, 'type', key, message);
   },
 
   start: function (errors = [], data) {},

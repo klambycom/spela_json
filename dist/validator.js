@@ -1,5 +1,9 @@
 "use strict";
 
+var addError = function (errors, type, key, message) {
+  return errors.push({ type: type, key: key, message: message }) && errors;
+};
+
 var isUndefined = function (x) {
   return typeof x === "undefined" || x === null || x === "";
 };
@@ -11,13 +15,13 @@ var validate = {
       return errors;
     }
 
+    var message = "\"" + data.type + "\" is not a valid type";
+
     if (isUndefined(data.type)) {
-      errors.push({ type: "type", key: key, message: "type must be defined" });
-    } else {
-      errors.push({ type: "type", key: key, message: "\"" + data.type + "\" is not a valid type" });
+      message = "type must be defined";
     }
 
-    return errors;
+    return addError(errors, "type", key, message);
   },
 
   start: function (_x, data) {
