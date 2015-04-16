@@ -82,7 +82,19 @@ module.exports = function (context) {
       });
     },
 
+    /**
+     * Array containing all files
+     *
+     * @name files
+     */
+
     files: files,
+
+    /**
+     * Duration of the whole file in seconds
+     *
+     * @name duration
+     */
 
     duration: duration,
 
@@ -116,6 +128,7 @@ module.exports = function (context) {
       files.forEach(function (x) {
         loadSound(context, function (buffer) {
           // Calculate duration
+          // TODO Calculate rate and cuts
           var realDuration = buffer.duration + x.start;
           if (realDuration > duration) duration = realDuration;
           // Change nr of loaded files

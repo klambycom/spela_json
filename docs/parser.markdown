@@ -8,6 +8,14 @@
 
 * **Array** all buffer sources
 
+## files
+
+Array containing all files
+
+## duration
+
+Duration of the whole file in seconds
+
 ## ready()
 
 ### Return:
