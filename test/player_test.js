@@ -1,7 +1,4 @@
-var rewire = require('rewire');
-var Player = rewire('../dist/player.js');
-
-global.AudioContext = function () {
+var AudioC = function () {
   return {
     createBufferSource: function () {
       return {
@@ -13,6 +10,10 @@ global.AudioContext = function () {
   }
 };
 
+global.window = {};
+global.window.AudioContext = AudioC;
+global.window.webkitAudioContext = AudioC;
+
 global.XMLHttpRequest = function () {
   return {
     open: function () {},
@@ -20,6 +21,9 @@ global.XMLHttpRequest = function () {
     addEventListener: function () {}
   };
 };
+
+var rewire = require('rewire');
+var Player = rewire('../dist/player.js');
 
 describe('Player', function () {
   var sut, data, dataCopy;
@@ -61,10 +65,6 @@ describe('Player', function () {
     sut = new Player(data);
   });
 
-  it('should have a _countFiles-function', function () {
-    expect(sut._countFiles()).toEqual(5);
-  });
-
   describe('#constructor', function () {
     it('shuld take JSON as input to constructor', function () {
       expect(sut._json_data).toEqual(dataCopy);
@@ -81,26 +81,27 @@ describe('Player', function () {
       expect(sut.play).toBeDefined();
     });
 
-    it('should return true when not ready and can\'t play', function () {
+    it('should return false when not ready and can\'t play', function () {
+      sut._parsed.ready = function () { return false; };
       expect(sut.play()).toEqual(false);
     });
 
     it('should not play when all files is not ready', function () {
-      spyOn(sut, '_playFile');
+      spyOn(sut._parsed, 'play');
       sut.play();
-      expect(sut._playFile).not.toHaveBeenCalled();
+      expect(sut._parsed.play).not.toHaveBeenCalled();
     });
 
     it('should return true when ready and can play', function () {
-      sut._counter = 5;
+      sut._parsed.ready = function () { return true; };
       expect(sut.play()).toEqual(true);
     });
 
     it('should play when all files is ready', function () {
-      spyOn(sut, '_playFile');
-      sut._counter = 5;
+      spyOn(sut._parsed, 'play');
+      sut._parsed.ready = function () { return true; };
       sut.play();
-      expect(sut._playFile).toHaveBeenCalled();
+      expect(sut._parsed.play).toHaveBeenCalled();
     });
   });
 
@@ -150,22 +151,6 @@ describe('Player', function () {
       expect(sut.getJSON()).toEqual({ name: 'walt', data: {} });
     });
 
-    it('should reset loaded files counter', function () {
-      expect(sut._counter).toEqual(0);
-    });
-
-    it('should count nr of files', function () {
-      sut.setJSON(data);
-      expect(sut._nr_of_files).toEqual(5);
-    });
-
-    it('should call loadSound for each file', function () {
-      var counter = 0;
-      Player.__set__('loadSound', function () { counter += 1; });
-      sut.setJSON(data);
-      expect(counter).toEqual(5);
-    });
-
     it('should set _sources to empty array', function () {
       expect(sut._sources).toEqual([]);
     });
@@ -193,12 +178,12 @@ describe('Player', function () {
     });
 
     it('should return false when no files are loaded', function () {
-      sut._counter = 0;
+      sut._parsed.ready = function () { return false; };
       expect(sut.ready()).toEqual(false);
     });
 
     it('should return true when all files is loaded', function () {
-      sut._counter = 5;
+      sut._parsed.ready = function () { return true; };
       expect(sut.ready()).toEqual(true);
     });
   });
