@@ -17,35 +17,27 @@
 
 /*! */
 
+// Start playing on right position
+var playStart = function (context, source, file) {
+  source.connect(context.destination);
+  source.start(file.start);
+};
+
+// Change play rate
+var playRate = function (context, source, file) {
+  if (typeof file.rate !== "undefined") {
+    source.playbackRate.value = file.rate;
+  }
+};
+
+// Start build source
+var buildSource = function (context, cache, file) {
+  var source = context.createBufferSource();
+  source.buffer = cache[file.file];
+  return source;
+};
+
 module.exports = function (context, cache) {
-  // Start playing on right position
-  var playStart = function (source, file) {
-    source.connect(context.destination);
-    source.start(file.start);
-  };
-
-  // Change play rate
-  var playRate = function (source, file) {
-    if (typeof file.rate !== "undefined") {
-      source.playbackRate.value = file.rate;
-    }
-  };
-
-  // Start build source
-  var buildSource = function (file) {
-    // Create source
-    var source = context.createBufferSource();
-    source.buffer = cache[file.file];
-
-    // Choose play rate
-    playRate(source, file);
-
-    // Choose where to start playing
-    playStart(source, file);
-
-    return source;
-  };
-
   return function (files, duration, ready) {
     return {
 
@@ -56,7 +48,12 @@ module.exports = function (context, cache) {
 
       play: function play() {
         return files.map(function (x) {
-          return buildSource(x);
+          var source = buildSource(context, cache, x);
+
+          playRate(context, source, x); // Choose play rate
+          playStart(context, source, x); // Choose where to start playing
+
+          return source;
         });
       },
 
