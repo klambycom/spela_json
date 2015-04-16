@@ -14,12 +14,14 @@
 
 /*! */
 
+let _builder = require('./builder');
+
 module.exports = function (context) {
   let soundCache = {};
   let files = [];
   let nr_of_loaded_files = 0;
   let duration = 0;
-  let builder = require('./builder')(context, soundCache);
+  let builder = _builder(context, soundCache);
 
   // Load sound from file
   let loadSound = function (context, fn, url) {
