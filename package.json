@@ -1,6 +1,6 @@
 {
-  "name": "ljudspelare",
-  "version": "1.0.0",
+  "name": "SpelaJSON",
+  "version": "0.0.1",
   "description": "todo",
   "main": "index.js",
   "scripts": {
