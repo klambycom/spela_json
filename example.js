@@ -65,8 +65,8 @@ let file2 = {
   }
 };
 
-console.log('VALID', ljud.validate(file));
-console.log('INVALID', ljud.validate(file2));
+//console.log('VALID', ljud.validate(file));
+//console.log('INVALID', ljud.validate(file2));
 
 try {
   var player = new ljud(file);

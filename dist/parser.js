@@ -19,6 +19,74 @@
 var _builder = require("./builder");
 var validator = require("./validator");
 
+// {
+//   "type": "file",
+//   "file": "./",
+//   "parts": [
+//     { "time": [0, 4], "edits": [] },
+//     { "time": [5, 8], "edits": [] },
+//     { "time": [10, 14], "edits": [ "rate": 3 ] },
+//     { "time": [15, 18], "edits": [] }
+//   ]
+// }
+
+var parse_files = function (files) {
+  files = files.map(function (file) {
+    var offset = file.start;
+    var start = file.start - offset;
+    var end = file.end - offset;
+    delete file.start;
+    delete file.end;
+
+    file.offset = offset;
+    file.parts = [];
+
+    if (typeof file.cuts !== "undefined") {
+      var cuts = Object.keys(file.cuts).map(function (y) {
+        return file.cuts[y];
+      });
+      delete file.cuts;
+
+      // TODO Sort cuts
+
+      file.parts = cuts.map(function (x) {
+        var tmp = start;
+        start = x.to;
+        return { time: [tmp, x.from], edits: [] };
+      });
+
+      if (start < end) {
+        file.parts.push({ time: [start, end], edits: [] });
+      }
+    }
+
+    if (file.parts.length === 0) {
+      file.parts.push({ time: [start, end], edits: [] });
+    }
+
+    return file;
+  });
+
+  return files;
+};
+
+//parse_files([
+//  { type: 'file', file: '/alien_phaser.wav', start: 0, end: 10 },
+//  { type: 'file', file: '/car.wav', start: 1.5, end: 10 },
+//  { type: 'file', file: '/crumple_paper.wav', start: 3, end: 10 },
+//  {
+//    type: 'file',
+//    file: '/mbira.wav',
+//    start: 0,
+//    end: 10,
+//    cuts: {
+//      '1': { from: 2, to: 3 },
+//      '2': { from: 5, to: 6 }
+//    }
+//  },
+//  { type: 'file', file: '/surround.wav', start: 3, end: 10 }
+//]);
+
 module.exports = function (context) {
   var soundCache = {};
   var files = [];
@@ -98,7 +166,6 @@ module.exports = function (context) {
       files.forEach(function (x) {
         loadSound(context, function (buffer) {
           // Calculate duration
-          // TODO Calculate rate and cuts
           var realDuration = buffer.duration + x.start;
           if (realDuration > duration) {
             duration = realDuration;
@@ -107,6 +174,8 @@ module.exports = function (context) {
           nr_of_loaded_files += 1;
         }, x.file);
       });
+
+      //parse_files(files);
 
       return builder(files);
     },
