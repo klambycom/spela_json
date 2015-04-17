@@ -15,6 +15,7 @@
 /*! */
 
 let _builder = require('./builder');
+let validator = require('./validator');
 
 module.exports = function (context) {
   let soundCache = {};
@@ -59,6 +60,12 @@ module.exports = function (context) {
     return nr_of_loaded_files === files.length;
   };
 
+  function ValidationException(errors) {
+    this.name = 'ValidationException';
+    this.message = 'The data is not valid SpelaJSON-data';
+    this.errors = errors;
+  }
+
   return {
 
     /**
@@ -66,10 +73,12 @@ module.exports = function (context) {
      *
      * @method parse
      * @param {Object} json
+     * @throws {ValidationException} Invalid JSON
      */
 
     parse(json) {
-      // TODO Validation!
+      let errors = validator(json);
+      if (errors.length > 0) { throw new ValidationException(errors); }
 
       nr_of_loaded_files = 0;
       duration = 0;

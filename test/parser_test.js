@@ -2,15 +2,24 @@ var rewire = require('rewire');
 var parser = rewire('../dist/parser.js');
 
 describe('Parser', function () {
-  var sut, contextMock, builderMock;
+  var sut, mock;
 
   beforeEach(function () {
-    contextMock = {};
-    sut = parser(contextMock);
-
-    builderMock = function () {
+    mock = {
+      context: {},
+      builder: function () {},
+      validator: function (json) {
+        if (json.fail) { return [1, 2]; }
+        return [];
+      }
     };
-    parser.__set__('_builder', builderMock);
+
+    sut = parser(mock.context);
+
+    parser.__set__('_builder', mock.builder);
+    parser.__set__('validator', mock.validator);
+
+    spyOn(mock, 'validator');
   });
 
   describe('#parse', function () {

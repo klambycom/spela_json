@@ -33,5 +33,9 @@ let file = {
   }
 };
 
-var player = new ljud(file);
-window.player = player;
+try {
+  var player = new ljud(file);
+  window.player = player;
+} catch (e) {
+  console.log(e);
+}

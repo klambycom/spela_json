@@ -23,6 +23,7 @@ class Player {
    * @method constructor
    * @param {Object} json The audio json
    * @param {AudioContext} context
+   * @throws {ValidationException} Invalid JSON
    */
 
   constructor(json = {}, context = new AudioContext()) {
@@ -95,6 +96,7 @@ class Player {
    *
    * @method setJSON
    * @param {Object} json The audio json
+   * @throws {ValidationException} Invalid JSON
    */
 
   setJSON(json = {}) {

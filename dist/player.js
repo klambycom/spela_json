@@ -30,6 +30,7 @@ var Player = (function () {
    * @method constructor
    * @param {Object} json The audio json
    * @param {AudioContext} context
+   * @throws {ValidationException} Invalid JSON
    */
 
   function Player() {
@@ -137,6 +138,7 @@ var Player = (function () {
        *
        * @method setJSON
        * @param {Object} json The audio json
+       * @throws {ValidationException} Invalid JSON
        */
 
       value: function setJSON() {
