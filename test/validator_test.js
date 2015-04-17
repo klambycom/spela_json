@@ -3,6 +3,25 @@ var validator = rewire('../dist/validator.js');
 var validatorFns = validator.__get__('validate');
 
 describe('Validator', function () {
+  describe('JSON', function () {
+    var data;
+
+    beforeEach(function () {
+      data = { name: 'filen' };
+    });
+
+    it('should return empty array if no errors', function () {
+      expect(validator(data)).toEqual([]);
+    });
+
+    it('should create error if name-field is missing', function () {
+      delete data.name;
+      expect(validator(data)).toEqual([
+        { type: 'meta', key: 'name', message: 'name must be defined' }
+      ]);
+    });
+  });
+
   describe('#type', function () {
     it('should have type-function', function () {
       expect(validatorFns.type).toBeDefined();

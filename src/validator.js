@@ -30,5 +30,13 @@ let validate = {
   end: function (errors = [], key, data) {}
 };
 
-module.exports = function () {
+module.exports = function (json = {}) {
+  let errors = [];
+
+  if (isUndefined(json.name)) {
+    let error = addError(errors, 'meta', 'name');
+    errors = error('name must be defined');
+  }
+
+  return errors;
 };

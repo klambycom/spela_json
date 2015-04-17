@@ -52,4 +52,14 @@ var validate = {
   }
 };
 
-module.exports = function () {};
+module.exports = function () {
+  var json = arguments[0] === undefined ? {} : arguments[0];
+  var errors = [];
+
+  if (isUndefined(json.name)) {
+    var error = addError(errors, "meta", "name");
+    errors = error("name must be defined");
+  }
+
+  return errors;
+};
