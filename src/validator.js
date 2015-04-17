@@ -37,9 +37,5 @@ let validate = {
   end: function (errors = [], key, data) {}
 };
 
-module.exports = {
-  data: function () {},
-  type: validate.type,
-  start: validate.start,
-  end: validate.end
+module.exports = function () {
 };
