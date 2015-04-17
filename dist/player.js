@@ -13,6 +13,7 @@ var _classCallCheck = function (instance, Constructor) { if (!(instance instance
 /*! */
 
 var AJSON = require("./parser");
+var validator = require("./validator");
 
 // Create a copy of JSON
 var cloneObject = function (json) {
@@ -43,7 +44,25 @@ var Player = (function () {
     this.setJSON(json);
   }
 
-  _prototypeProperties(Player, null, {
+  _prototypeProperties(Player, {
+    validate: {
+
+      /**
+       * ## Player.validate(json)
+       *
+       * Validate the JSON.
+       *
+       * @param {Object} json
+       * @return {Array} errors
+       */
+
+      value: function validate(json) {
+        return validator(json);
+      },
+      writable: true,
+      configurable: true
+    }
+  }, {
     play: {
 
       /**
@@ -156,7 +175,7 @@ var Player = (function () {
        * Get the JSON.
        *
        * @method getJSON
-       * @return {Object} json The audio json
+       * @return {Object} The audio json
        */
 
       value: function getJSON() {

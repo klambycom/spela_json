@@ -7,6 +7,7 @@
 /*! */
 
 let AJSON = require('./parser');
+let validator = require('./validator');
 
 // Create a copy of JSON
 let cloneObject = json => JSON.parse(JSON.stringify(json));
@@ -109,11 +110,24 @@ class Player {
    * Get the JSON.
    *
    * @method getJSON
-   * @return {Object} json The audio json
+   * @return {Object} The audio json
    */
 
   getJSON() {
     return cloneObject(this._json_data);
+  }
+
+  /**
+   * ## Player.validate(json)
+   *
+   * Validate the JSON.
+   *
+   * @param {Object} json
+   * @return {Array} errors
+   */
+
+  static validate(json) {
+    return validator(json);
   }
 }
 
