@@ -24,6 +24,10 @@ let isUndefined = x => typeof x === 'undefined' || x === null || x === '';
 let isNumber = x => typeof x === 'number';
 let isPositive = x => isNumber(x) && x >= 0;
 
+let addError = (errors, type, key) => {
+  return message => errors.push({ type, key, message }) && errors;
+};
+
 // Validation
 let validate = {
   type: check('type', compose(eq('file'), dot('type')), function (data) {
@@ -31,14 +35,13 @@ let validate = {
     return '"' + data.type + '" is not a valid type';
   }),
 
-  start: function (errors = [], key, data) {
+  start(errors = [], key, data) {
+    // No error
     if (isPositive(data.start)) { return errors; }
-    if (!isNumber(data.start)) {
-      return errors.push({ type: 'start', key, message: 'start time must be a number' })
-        && errors;
-    }
-    return errors.push({ type: 'start', key, message: 'start time must be at least zero' })
-      && errors;
+    // Errors
+    let error = addError(errors, 'start', key);
+    if (!isNumber(data.start)) { return error('start time must be a number'); }
+    return error('start time must be at least zero');
   },
 
   end: function (errors = [], key, data) {}

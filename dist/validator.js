@@ -47,6 +47,12 @@ var isPositive = function (x) {
   return isNumber(x) && x >= 0;
 };
 
+var addError = function (errors, type, key) {
+  return function (message) {
+    return errors.push({ type: type, key: key, message: message }) && errors;
+  };
+};
+
 // Validation
 var validate = {
   type: check("type", compose(eq("file"), dot("type")), function (data) {
@@ -56,15 +62,18 @@ var validate = {
     return "\"" + data.type + "\" is not a valid type";
   }),
 
-  start: function (_x, key, data) {
+  start: function start(_x, key, data) {
     var errors = arguments[0] === undefined ? [] : arguments[0];
+    // No error
     if (isPositive(data.start)) {
       return errors;
     }
+    // Errors
+    var error = addError(errors, "start", key);
     if (!isNumber(data.start)) {
-      return errors.push({ type: "start", key: key, message: "start time must be a number" }) && errors;
+      return error("start time must be a number");
     }
-    return errors.push({ type: "start", key: key, message: "start time must be at least zero" }) && errors;
+    return error("start time must be at least zero");
   },
 
   end: function (_x, key, data) {
