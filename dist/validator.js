@@ -4,6 +4,9 @@
 var isUndefined = function (x) {
   return typeof x === "undefined" || x === null || x === "";
 };
+var isDefined = function (x) {
+  return !isUndefined(x);
+};
 var isNumber = function (x) {
   return typeof x === "number";
 };
@@ -47,8 +50,17 @@ var validate = {
     return error("start time must be at least zero");
   },
 
-  end: function (_x, key, data) {
+  end: function end(_x, key, data) {
     var errors = arguments[0] === undefined ? [] : arguments[0];
+  },
+
+  name: function name(_x, key, data) {
+    var errors = arguments[0] === undefined ? [] : arguments[0];
+    if (isDefined(data.name)) {
+      return errors;
+    }
+    var error = addError(errors, "name", key);
+    return error("name must be defined");
   }
 };
 
@@ -56,10 +68,10 @@ module.exports = function () {
   var json = arguments[0] === undefined ? {} : arguments[0];
   var errors = [];
 
-  if (isUndefined(json.name)) {
-    var error = addError(errors, "meta", "name");
-    errors = error("name must be defined");
-  }
+  // Meta
+  errors = validate.name(errors, "name", json);
+
+  // Data
 
   return errors;
 };

@@ -17,7 +17,7 @@ describe('Validator', function () {
     it('should create error if name-field is missing', function () {
       delete data.name;
       expect(validator(data)).toEqual([
-        { type: 'meta', key: 'name', message: 'name must be defined' }
+        { type: 'name', key: 'name', message: 'name must be defined' }
       ]);
     });
   });
@@ -115,6 +115,22 @@ describe('Validator', function () {
   describe('#end', function () {
     it('should have end-function', function () {
       expect(validatorFns.end).toBeDefined();
+    });
+  });
+
+  describe('#name', function () {
+    it('should be defined', function () {
+      expect(validatorFns.name).toBeDefined();
+    });
+
+    it('should return empty array if valid', function () {
+      expect(validatorFns.name([ ], 'id1', { name: 'hej' })).toEqual([ ]);
+    });
+
+    it('should return error if invalid', function () {
+      expect(validatorFns.name([ ], 'id1', { })).toEqual([
+        { type: 'name', key: 'id1', message: 'name must be defined' }
+      ]);
     });
   });
 });
