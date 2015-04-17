@@ -2,47 +2,10 @@ var rewire = require('rewire');
 var validator = rewire('../dist/validator.js');
 
 describe('Validator', function () {
-  var data;
-
-  beforeEach(function () {
-    data = {
-      name: 'audiofile1',
-      data: {
-        '1': {
-          type: 'file',
-          file: '/alien_phaser.wav',
-          start: 0
-        },
-        '2': {
-          type: 'file',
-          file: '/car.wav',
-          start: 1.5
-        },
-        '3': {
-          type: 'file',
-          file: '/crumple_paper.wav',
-          start: 3
-        },
-        '4': {
-          type: 'file',
-          file: '/mbira.wav',
-          start: 5
-        },
-        '5': {
-          type: 'file',
-          file: '/surround.wav',
-          start: 3
-        }
-      }
-    };
-  });
-
   describe('#data', function () {
     it('should have data-function', function () {
       expect(validator.data).toBeDefined();
     });
-
-    it('should have a type');
   });
 
   describe('#type', function () {
