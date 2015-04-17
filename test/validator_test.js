@@ -1,6 +1,7 @@
 var rewire = require('rewire');
 var validator = rewire('../dist/validator.js');
 var validatorFns = validator.__get__('validate');
+var audioJson = require('./fixtures/audio_json.js');
 
 var msg = {
   name: { missing: 'name must be defined' },
@@ -30,21 +31,7 @@ describe('Validator', function () {
     var data;
 
     beforeEach(function () {
-      data = {
-        name: 'filen',
-        data: {
-          '1': {
-            type: 'file',
-            start: 0,
-            end: 5
-          },
-          '2': {
-            type: 'file',
-            start: 0,
-            end: 5
-          }
-        }
-      };
+      data = audioJson();
     });
 
     it('should return empty array if no errors', function () {
