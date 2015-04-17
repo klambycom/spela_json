@@ -81,8 +81,16 @@ module.exports = function () {
   // Meta
   errors = validate.name(errors, "name", json);
   errors = validate.data(errors, "data", json);
+  if (isUndefined(json.data) || !isObject(json.data)) {
+    return errors;
+  }
 
   // Data
+  Object.keys(json.data).forEach(function (x) {
+    var data = json.data[x];
+
+    errors = validate.type(errors, x, data);
+  });
 
   return errors;
 };

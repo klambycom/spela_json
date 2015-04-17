@@ -26,7 +26,17 @@ describe('Validator', function () {
     var data;
 
     beforeEach(function () {
-      data = { name: 'filen', data: { } };
+      data = {
+        name: 'filen',
+        data: {
+          '1': {
+            type: 'file'
+          },
+          '2': {
+            type: 'file'
+          }
+        }
+      };
     });
 
     it('should return empty array if no errors', function () {
@@ -45,6 +55,14 @@ describe('Validator', function () {
       expect(validator(data)).toEqual([
         { type: 'data', key: 'data', message: msg.data.obj }
       ]);
+    });
+
+    describe('data', function () {
+      it('should create error if type is invalid', function () {
+        data.data['1'].type = 'fil';
+        expect(validator(data))
+          .toEqual([{ type: 'type', key: '1', message: msg.type.invalid }]);
+      });
     });
   });
 
