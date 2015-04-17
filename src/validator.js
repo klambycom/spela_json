@@ -1,11 +1,4 @@
 // Helper functions
-let check = (type, valid, fn) => {
-  return (errors = [], key, data) => {
-    if (valid(data)) { return errors; }
-    return errors.push({ type, key, message: fn(data) }) && errors;
-  };
-};
-
 let isUndefined = x => typeof x === 'undefined' || x === null || x === '';
 let isNumber = x => typeof x === 'number';
 let isPositive = x => isNumber(x) && x >= 0;

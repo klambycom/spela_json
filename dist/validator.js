@@ -1,16 +1,6 @@
 "use strict";
 
 // Helper functions
-var check = function (type, valid, fn) {
-  return function (_x, key, data) {
-    var errors = arguments[0] === undefined ? [] : arguments[0];
-    if (valid(data)) {
-      return errors;
-    }
-    return errors.push({ type: type, key: key, message: fn(data) }) && errors;
-  };
-};
-
 var isUndefined = function (x) {
   return typeof x === "undefined" || x === null || x === "";
 };
