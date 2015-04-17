@@ -33,14 +33,12 @@ let validate = {
 
   name(errors = [], key, data) {
     if (isDefined(data.name)) { return errors; }
-    let error = addError(errors, 'name', key);
-    return error('name must be defined');
+    return addError(errors, 'name', key)('name must be defined');
   },
 
   data(errors = [], key, data) {
     if (isDefined(data.data) && isObject(data.data)) { return errors; }
-    let error = addError(errors, 'data', key);
-    return error('data must be an object');
+    return addError(errors, 'data', key)('data must be an object');
   }
 };
 

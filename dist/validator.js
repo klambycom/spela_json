@@ -62,8 +62,7 @@ var validate = {
     if (isDefined(data.name)) {
       return errors;
     }
-    var error = addError(errors, "name", key);
-    return error("name must be defined");
+    return addError(errors, "name", key)("name must be defined");
   },
 
   data: function data(_x, key, data) {
@@ -71,8 +70,7 @@ var validate = {
     if (isDefined(data.data) && isObject(data.data)) {
       return errors;
     }
-    var error = addError(errors, "data", key);
-    return error("data must be an object");
+    return addError(errors, "data", key)("data must be an object");
   }
 };
 
