@@ -84,7 +84,19 @@ Get the JSON.
 
 ##### Return:
 
-* **Object** json The audio json
+* **Object** The audio json
+
+#### Player.validate(json)
+
+Validate the JSON.
+
+##### Params:
+
+* **Object** *json* 
+
+##### Return:
+
+* **Array** errors
 
 <!-- End src/player.js -->
 
