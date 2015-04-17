@@ -35,11 +35,13 @@ describe('Validator', function () {
         data: {
           '1': {
             type: 'file',
-            start: 0
+            start: 0,
+            end: 5
           },
           '2': {
             type: 'file',
-            start: 0
+            start: 0,
+            end: 5
           }
         }
       };
@@ -74,6 +76,14 @@ describe('Validator', function () {
         data.data['1'].start = -2;
         expect(validator(data))
           .toEqual([{ type: 'start', key: '1', message: msg.start.zero }]);
+      });
+
+
+      it('should create error if end-field is missing', function () {
+        delete data.data['2'].end;
+        expect(validator(data)).toEqual([
+          { type: 'end', key: '2', message: msg.end.num }
+        ]);
       });
     });
   });
