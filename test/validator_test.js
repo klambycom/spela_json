@@ -30,10 +30,12 @@ describe('Validator', function () {
         name: 'filen',
         data: {
           '1': {
-            type: 'file'
+            type: 'file',
+            start: 0
           },
           '2': {
-            type: 'file'
+            type: 'file',
+            start: 0
           }
         }
       };
@@ -62,6 +64,12 @@ describe('Validator', function () {
         data.data['1'].type = 'fil';
         expect(validator(data))
           .toEqual([{ type: 'type', key: '1', message: msg.type.invalid }]);
+      });
+
+      it('should create error if start is invalid', function () {
+        data.data['1'].start = -2;
+        expect(validator(data))
+          .toEqual([{ type: 'start', key: '1', message: msg.start.zero }]);
       });
     });
   });

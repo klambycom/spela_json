@@ -55,6 +55,7 @@ module.exports = function (json = {}) {
     let data = json.data[x];
 
     errors = validate.type(errors, x, data);
+    errors = validate.start(errors, x, data);
   });
 
   return errors;
