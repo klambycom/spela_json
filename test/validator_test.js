@@ -2,6 +2,19 @@ var rewire = require('rewire');
 var validator = rewire('../dist/validator.js');
 var validatorFns = validator.__get__('validate');
 
+var msg = {
+  name: { missing: 'name must be defined' },
+  data: { obj: 'data must be an object' },
+  type: {
+    invalid: '"fil" is not a valid type',
+    missing: 'type must be defined'
+  },
+  start: {
+    num: 'start time must be a number',
+    zero: 'start time must be at least zero'
+  }
+};
+
 describe('Validator', function () {
   describe('JSON', function () {
     var data;
@@ -17,14 +30,14 @@ describe('Validator', function () {
     it('should create error if name-field is missing', function () {
       delete data.name;
       expect(validator(data)).toEqual([
-        { type: 'name', key: 'name', message: 'name must be defined' }
+        { type: 'name', key: 'name', message: msg.name.missing }
       ]);
     });
 
     it('should create error if data-field is missing', function () {
       delete data.data;
       expect(validator(data)).toEqual([
-        { type: 'data', key: 'data', message: 'data must be an object' }
+        { type: 'data', key: 'data', message: msg.data.obj }
       ]);
     });
   });
@@ -39,39 +52,39 @@ describe('Validator', function () {
     });
 
     it('should return old errors when data is valid', function () {
-      var errors = { type: 'type', key: 'id1', message: '"fil" is not a valid type' };
+      var errors = { type: 'type', key: 'id1', message: msg.type.invalid };
       expect(validatorFns.type([errors], 'id1', { type: 'file' })).toEqual([errors]);
     });
 
     it('should return error when type is wrong', function () {
       expect(validatorFns.type([], 'id1', { type: 'fil' })).toEqual([
-          { type: 'type', key: 'id1', message: '"fil" is not a valid type' }
+          { type: 'type', key: 'id1', message: msg.type.invalid }
       ]);
     });
 
     it('should return error when type is empty', function () {
       expect(validatorFns.type([], 'id1', { type: '' })).toEqual([
-          { type: 'type', key: 'id1', message: 'type must be defined' }
+          { type: 'type', key: 'id1', message: msg.type.missing }
       ]);
     });
 
     it('should return error when type is undefined', function () {
       expect(validatorFns.type([], 'id1', { })).toEqual([
-          { type: 'type', key: 'id1', message: 'type must be defined' }
+          { type: 'type', key: 'id1', message: msg.type.missing }
       ]);
     });
 
     it('should return error when type is null', function () {
       expect(validatorFns.type([], 'id1', { type: null })).toEqual([
-          { type: 'type', key: 'id1', message: 'type must be defined' }
+          { type: 'type', key: 'id1', message: msg.type.missing }
       ]);
     });
 
     it('should return old and new errors when data is invalid', function () {
-      var errors = { type: 'type', key: 'id1', message: '"fil" is not a valid type' };
+      var errors = { type: 'type', key: 'id1', message: msg.type.invalid };
       expect(validatorFns.type([errors], 'id1', { type: '' })).toEqual([
           errors,
-          { type: 'type', key: 'id1', message: 'type must be defined' }
+          { type: 'type', key: 'id1', message: msg.type.missing }
       ]);
     });
   });
@@ -86,35 +99,35 @@ describe('Validator', function () {
     });
 
     it('should return old errors when start time is valid', function () {
-      var errors = { type: 'type', key: 'id1', message: '"fil" is not a valid type' };
+      var errors = { type: 'type', key: 'id1', message: msg.type.invalid };
       expect(validatorFns.start([errors], 'id1', { start: 8 })).toEqual([errors]);
     });
 
     it('should return error when start time is not a number', function () {
       expect(validatorFns.start([], 'id1', { start: '' })).toEqual([
-          { type: 'start', key: 'id1', message: 'start time must be a number' }
+          { type: 'start', key: 'id1', message: msg.start.num }
       ]);
     });
 
     it('should return old errors and new error when start time is not a number', function () {
-      var errors = { type: 'type', key: 'id1', message: '"fil" is not a valid type' };
+      var errors = { type: 'type', key: 'id1', message: msg.type.invalid };
       expect(validatorFns.start([errors], 'id1', { start: '' })).toEqual([
           errors,
-          { type: 'start', key: 'id1', message: 'start time must be a number' }
+          { type: 'start', key: 'id1', message: msg.start.num }
       ]);
     });
 
     it('should return error when start time is negative', function () {
       expect(validatorFns.start([], 'id1', { start: -1 })).toEqual([
-          { type: 'start', key: 'id1', message: 'start time must be at least zero' }
+          { type: 'start', key: 'id1', message: msg.start.zero }
       ]);
     });
 
     it('should return old errors and new error when start time is negative', function () {
-      var errors = { type: 'type', key: 'id1', message: '"fil" is not a valid type' };
+      var errors = { type: 'type', key: 'id1', message: msg.type.invalid };
       expect(validatorFns.start([errors], 'id1', { start: -5 })).toEqual([
           errors,
-          { type: 'start', key: 'id1', message: 'start time must be at least zero' }
+          { type: 'start', key: 'id1', message: msg.start.zero }
       ]);
     });
   });
@@ -136,7 +149,7 @@ describe('Validator', function () {
 
     it('should return error if invalid', function () {
       expect(validatorFns.name([ ], 'id1', { })).toEqual([
-        { type: 'name', key: 'id1', message: 'name must be defined' }
+        { type: 'name', key: 'id1', message: msg.name.missing }
       ]);
     });
   });
@@ -151,7 +164,7 @@ describe('Validator', function () {
     });
 
     it('should return error if data is not an object', function () {
-      var error = { type: 'data', key: 'id1', message: 'data must be an object' };
+      var error = { type: 'data', key: 'id1', message: msg.data.obj };
       expect(validatorFns.data([ ], 'id1', { data: 1 })).toEqual([ error ]);
       expect(validatorFns.data([ ], 'id1', { data: [] })).toEqual([ error ]);
       expect(validatorFns.data([ ], 'id1', { })).toEqual([ error ]);
