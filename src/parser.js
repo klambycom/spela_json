@@ -28,46 +28,46 @@ let validator = require('./validator');
 //   ]
 // }
 
-let parse_files = function (files) {
+let parseData = function (rows) {
 
-  files = files.map(function (file) {
-    let offset = file.start;
-    let start = file.start - offset;
-    let end = file.end - offset;
-    delete file.start;
-    delete file.end;
+  rows = rows.map(function (row) {
+    let offset = row.start;
+    let start = row.start - offset;
+    let end = row.end - offset;
+    delete row.start;
+    delete row.end;
 
-    file.offset = offset;
-    file.parts = [];
+    row.offset = offset;
+    row.parts = [];
 
-    if (typeof file.cuts !== 'undefined') {
-      let cuts = Object.keys(file.cuts).map(y => file.cuts[y]);
-      delete file.cuts;
+    if (typeof row.cuts !== 'undefined') {
+      let cuts = Object.keys(row.cuts).map(y => row.cuts[y]);
+      delete row.cuts;
 
       // TODO Sort cuts
 
-      file.parts = cuts.map(x => {
+      row.parts = cuts.map(x => {
         let tmp = start;
         start = x.to;
         return { time: [tmp, x.from], edits: [] };
       });
 
       if (start < end) {
-        file.parts.push({ time: [start, end], edits: [] });
+        row.parts.push({ time: [start, end], edits: [] });
       }
     }
 
-    if (file.parts.length === 0) {
-      file.parts.push({ time: [ start, end ], edits: [] });
+    if (row.parts.length === 0) {
+      row.parts.push({ time: [ start, end ], edits: [] });
     }
 
-    return file;
+    return row;
   });
 
-  return files;
+  return rows;
 };
 
-//parse_files([
+//console.log(parseData([
 //  { type: 'file', file: '/alien_phaser.wav', start: 0, end: 10 },
 //  { type: 'file', file: '/car.wav', start: 1.5, end: 10 },
 //  { type: 'file', file: '/crumple_paper.wav', start: 3, end: 10 },
@@ -82,7 +82,7 @@ let parse_files = function (files) {
 //    }
 //  },
 //  { type: 'file', file: '/surround.wav', start: 3, end: 10 }
-//]);
+//]));
 
 module.exports = function (context) {
   let soundCache = {};
@@ -163,7 +163,7 @@ module.exports = function (context) {
         }, x.file);
       });
 
-      //parse_files(files);
+      //parseData(files);
 
       return builder(files);
     },

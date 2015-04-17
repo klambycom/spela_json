@@ -30,47 +30,47 @@ var validator = require("./validator");
 //   ]
 // }
 
-var parse_files = function (files) {
-  files = files.map(function (file) {
-    var offset = file.start;
-    var start = file.start - offset;
-    var end = file.end - offset;
-    delete file.start;
-    delete file.end;
+var parseData = function (rows) {
+  rows = rows.map(function (row) {
+    var offset = row.start;
+    var start = row.start - offset;
+    var end = row.end - offset;
+    delete row.start;
+    delete row.end;
 
-    file.offset = offset;
-    file.parts = [];
+    row.offset = offset;
+    row.parts = [];
 
-    if (typeof file.cuts !== "undefined") {
-      var cuts = Object.keys(file.cuts).map(function (y) {
-        return file.cuts[y];
+    if (typeof row.cuts !== "undefined") {
+      var cuts = Object.keys(row.cuts).map(function (y) {
+        return row.cuts[y];
       });
-      delete file.cuts;
+      delete row.cuts;
 
       // TODO Sort cuts
 
-      file.parts = cuts.map(function (x) {
+      row.parts = cuts.map(function (x) {
         var tmp = start;
         start = x.to;
         return { time: [tmp, x.from], edits: [] };
       });
 
       if (start < end) {
-        file.parts.push({ time: [start, end], edits: [] });
+        row.parts.push({ time: [start, end], edits: [] });
       }
     }
 
-    if (file.parts.length === 0) {
-      file.parts.push({ time: [start, end], edits: [] });
+    if (row.parts.length === 0) {
+      row.parts.push({ time: [start, end], edits: [] });
     }
 
-    return file;
+    return row;
   });
 
-  return files;
+  return rows;
 };
 
-//parse_files([
+//console.log(parseData([
 //  { type: 'file', file: '/alien_phaser.wav', start: 0, end: 10 },
 //  { type: 'file', file: '/car.wav', start: 1.5, end: 10 },
 //  { type: 'file', file: '/crumple_paper.wav', start: 3, end: 10 },
@@ -85,7 +85,7 @@ var parse_files = function (files) {
 //    }
 //  },
 //  { type: 'file', file: '/surround.wav', start: 3, end: 10 }
-//]);
+//]));
 
 module.exports = function (context) {
   var soundCache = {};
@@ -175,7 +175,7 @@ module.exports = function (context) {
         }, x.file);
       });
 
-      //parse_files(files);
+      //parseData(files);
 
       return builder(files);
     },
