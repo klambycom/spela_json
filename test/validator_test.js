@@ -16,6 +16,12 @@ var msg = {
 };
 
 describe('Validator', function () {
+  var errors;
+
+  beforeEach(function () {
+    errors = { type: 'type', key: 'id1', message: msg.type.invalid };
+  });
+
   describe('JSON', function () {
     var data;
 
@@ -52,7 +58,6 @@ describe('Validator', function () {
     });
 
     it('should return old errors when data is valid', function () {
-      var errors = { type: 'type', key: 'id1', message: msg.type.invalid };
       expect(validatorFns.type([errors], 'id1', { type: 'file' })).toEqual([errors]);
     });
 
@@ -81,7 +86,6 @@ describe('Validator', function () {
     });
 
     it('should return old and new errors when data is invalid', function () {
-      var errors = { type: 'type', key: 'id1', message: msg.type.invalid };
       expect(validatorFns.type([errors], 'id1', { type: '' })).toEqual([
           errors,
           { type: 'type', key: 'id1', message: msg.type.missing }
@@ -99,7 +103,6 @@ describe('Validator', function () {
     });
 
     it('should return old errors when start time is valid', function () {
-      var errors = { type: 'type', key: 'id1', message: msg.type.invalid };
       expect(validatorFns.start([errors], 'id1', { start: 8 })).toEqual([errors]);
     });
 
@@ -110,7 +113,6 @@ describe('Validator', function () {
     });
 
     it('should return old errors and new error when start time is not a number', function () {
-      var errors = { type: 'type', key: 'id1', message: msg.type.invalid };
       expect(validatorFns.start([errors], 'id1', { start: '' })).toEqual([
           errors,
           { type: 'start', key: 'id1', message: msg.start.num }
@@ -124,7 +126,6 @@ describe('Validator', function () {
     });
 
     it('should return old errors and new error when start time is negative', function () {
-      var errors = { type: 'type', key: 'id1', message: msg.type.invalid };
       expect(validatorFns.start([errors], 'id1', { start: -5 })).toEqual([
           errors,
           { type: 'start', key: 'id1', message: msg.start.zero }
