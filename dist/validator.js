@@ -40,6 +40,12 @@ var check = function (type, valid, fn) {
 var isUndefined = function (x) {
   return typeof x === "undefined" || x === null || x === "";
 };
+var isNumber = function (x) {
+  return typeof x === "number";
+};
+var isPositive = function (x) {
+  return isNumber(x) && x >= 0;
+};
 
 // Validation
 var validate = {
@@ -50,10 +56,18 @@ var validate = {
     return "\"" + data.type + "\" is not a valid type";
   }),
 
-  start: function (_x, data) {
+  start: function (_x, key, data) {
     var errors = arguments[0] === undefined ? [] : arguments[0];
+    if (isPositive(data.start)) {
+      return errors;
+    }
+    if (!isNumber(data.start)) {
+      return errors.push({ type: "start", key: key, message: "start time must be a number" }) && errors;
+    }
+    return errors.push({ type: "start", key: key, message: "start time must be at least zero" }) && errors;
   },
-  end: function (_x, data) {
+
+  end: function (_x, key, data) {
     var errors = arguments[0] === undefined ? [] : arguments[0];
   }
 };

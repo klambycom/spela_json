@@ -96,6 +96,43 @@ describe('Validator', function () {
     it('should have start-function', function () {
       expect(validator.start).toBeDefined();
     });
+
+    it('should return empty array when start time is valid', function () {
+      expect(validator.start([], 'id1', { start: 0 })).toEqual([]);
+    });
+
+    it('should return old errors when start time is valid', function () {
+      var errors = { type: 'type', key: 'id1', message: '"fil" is not a valid type' };
+      expect(validator.start([errors], 'id1', { start: 8 })).toEqual([errors]);
+    });
+
+    it('should return error when start time is not a number', function () {
+      expect(validator.start([], 'id1', { start: '' })).toEqual([
+          { type: 'start', key: 'id1', message: 'start time must be a number' }
+      ]);
+    });
+
+    it('should return old errors and new error when start time is not a number', function () {
+      var errors = { type: 'type', key: 'id1', message: '"fil" is not a valid type' };
+      expect(validator.start([errors], 'id1', { start: '' })).toEqual([
+          errors,
+          { type: 'start', key: 'id1', message: 'start time must be a number' }
+      ]);
+    });
+
+    it('should return error when start time is negative', function () {
+      expect(validator.start([], 'id1', { start: -1 })).toEqual([
+          { type: 'start', key: 'id1', message: 'start time must be at least zero' }
+      ]);
+    });
+
+    it('should return old errors and new error when start time is negative', function () {
+      var errors = { type: 'type', key: 'id1', message: '"fil" is not a valid type' };
+      expect(validator.start([errors], 'id1', { start: -5 })).toEqual([
+          errors,
+          { type: 'start', key: 'id1', message: 'start time must be at least zero' }
+      ]);
+    });
   });
 
   describe('#end', function () {

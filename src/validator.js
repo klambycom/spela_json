@@ -21,6 +21,8 @@ let check = (type, valid, fn) => {
 };
 
 let isUndefined = x => typeof x === 'undefined' || x === null || x === '';
+let isNumber = x => typeof x === 'number';
+let isPositive = x => isNumber(x) && x >= 0;
 
 // Validation
 let validate = {
@@ -29,8 +31,17 @@ let validate = {
     return '"' + data.type + '" is not a valid type';
   }),
 
-  start: function (errors = [], data) {},
-  end: function (errors = [], data) {}
+  start: function (errors = [], key, data) {
+    if (isPositive(data.start)) { return errors; }
+    if (!isNumber(data.start)) {
+      return errors.push({ type: 'start', key, message: 'start time must be a number' })
+        && errors;
+    }
+    return errors.push({ type: 'start', key, message: 'start time must be at least zero' })
+      && errors;
+  },
+
+  end: function (errors = [], key, data) {}
 };
 
 module.exports = {
