@@ -29,7 +29,12 @@ let validate = {
     return error('start time must be at least zero');
   },
 
-  end(errors = [], key, data) {},
+  end(errors = [], key, data) {
+    if (isPositive(data.end) && data.end > data.start) { return errors; }
+    let error = addError(errors, 'end', key);
+    if (data.end <= data.start) { return error('end time must be larger than start time'); }
+    return error('end time must be a number');
+  },
 
   name(errors = [], key, data) {
     if (isDefined(data.name)) { return errors; }

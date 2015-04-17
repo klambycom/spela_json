@@ -55,6 +55,14 @@ var validate = {
 
   end: function end(_x, key, data) {
     var errors = arguments[0] === undefined ? [] : arguments[0];
+    if (isPositive(data.end) && data.end > data.start) {
+      return errors;
+    }
+    var error = addError(errors, "end", key);
+    if (data.end <= data.start) {
+      return error("end time must be larger than start time");
+    }
+    return error("end time must be a number");
   },
 
   name: function name(_x, key, data) {

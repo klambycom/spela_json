@@ -12,6 +12,10 @@ var msg = {
   start: {
     num: 'start time must be a number',
     zero: 'start time must be at least zero'
+  },
+  end: {
+    toLow: 'end time must be larger than start time',
+    num: 'end time must be a number'
   }
 };
 
@@ -162,6 +166,31 @@ describe('Validator', function () {
   describe('#end', function () {
     it('should have end-function', function () {
       expect(validatorFns.end).toBeDefined();
+    });
+
+    it('should not return error when end time is valid', function () {
+      expect(validatorFns.end([], 'id1', { start: 0, end: 10 })).toEqual([]);
+    });
+
+    it('should return error when end time is lower than start time', function () {
+      expect(validatorFns.end([errors], 'id1', { start: 10, end: 1 })).toEqual([
+          errors,
+          { type: 'end', key: 'id1', message: msg.end.toLow }
+      ]);
+    });
+
+    it('should return error when end time is missing', function () {
+      expect(validatorFns.end([errors], 'id1', { start: 0 })).toEqual([
+          errors,
+          { type: 'end', key: 'id1', message: msg.end.num }
+      ]);
+    });
+
+    it('should return error when end time is not a number', function () {
+      expect(validatorFns.end([errors], 'id1', { start: [] })).toEqual([
+          errors,
+          { type: 'end', key: 'id1', message: msg.end.num }
+      ]);
     });
   });
 
