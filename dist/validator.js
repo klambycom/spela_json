@@ -1,31 +1,5 @@
 "use strict";
 
-// Functionl functions
-var compose = function () {
-  for (var _len = arguments.length, fns = Array(_len), _key = 0; _key < _len; _key++) {
-    fns[_key] = arguments[_key];
-  }
-
-  return function (result) {
-    for (var i = fns.length - 1; i > -1; i--) {
-      result = fns[i].call(undefined, result);
-    }
-
-    return result;
-  };
-};
-
-var eq = function (x) {
-  return function (y) {
-    return x === y;
-  };
-};
-var dot = function (key) {
-  return function (obj) {
-    return obj[key];
-  };
-};
-
 // Helper functions
 var check = function (type, valid, fn) {
   return function (_x, key, data) {
@@ -55,12 +29,19 @@ var addError = function (errors, type, key) {
 
 // Validation
 var validate = {
-  type: check("type", compose(eq("file"), dot("type")), function (data) {
-    if (isUndefined(data.type)) {
-      return "type must be defined";
+  type: function type(_x, key, data) {
+    var errors = arguments[0] === undefined ? [] : arguments[0];
+    // No error
+    if (data.type === "file") {
+      return errors;
     }
-    return "\"" + data.type + "\" is not a valid type";
-  }),
+    // Error
+    var error = addError(errors, "type", key);
+    if (isUndefined(data.type)) {
+      return error("type must be defined");
+    }
+    return error("\"" + data.type + "\" is not a valid type");
+  },
 
   start: function start(_x, key, data) {
     var errors = arguments[0] === undefined ? [] : arguments[0];
