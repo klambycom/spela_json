@@ -24,48 +24,14 @@ global.XMLHttpRequest = function () {
 
 var rewire = require('rewire');
 var Player = rewire('../dist/player.js');
+var audioJson = require('./fixtures/audio_json.js');
 
 describe('Player', function () {
   var sut, data, dataCopy;
 
   beforeEach(function () {
-    data = {
-      name: 'audiofile1',
-      data: {
-        '1': {
-          type: 'file',
-          file: '/alien_phaser.wav',
-          start: 0,
-          end: 10
-        },
-        '2': {
-          type: 'file',
-          file: '/car.wav',
-          start: 1.5,
-          end: 10
-        },
-        '3': {
-          type: 'file',
-          file: '/crumple_paper.wav',
-          start: 3,
-          end: 10
-        },
-        '4': {
-          type: 'file',
-          file: '/mbira.wav',
-          start: 5,
-          end: 10
-        },
-        '5': {
-          type: 'file',
-          file: '/surround.wav',
-          start: 3,
-          end: 10
-        }
-      }
-    };
-
-    dataCopy = JSON.parse(JSON.stringify(data));
+    data = audioJson();
+    dataCopy = audioJson();
 
     sut = new Player(data);
   });
