@@ -11,9 +11,49 @@ Differential Syncronization in JavaScript, to let users edit the same audio file
 TODO
 
 
-## Usage
+## Example
 
-TODO
+```javascript
+let SpelaJSON = require('./index');
+
+let file = {
+  name: 'audiofile1',
+  data: {
+    '1': {
+      type: 'file',
+      file: '/alien_phaser.wav',
+      start: 0
+    },
+    '2': {
+      type: 'file',
+      file: '/car.wav',
+      start: 1.5
+    },
+    '3': {
+      type: 'file',
+      file: '/crumple_paper.wav',
+      start: 3
+    },
+    '4': {
+      type: 'file',
+      file: '/mbira.wav',
+      start: 5,
+      rate: 4
+    },
+    '5': {
+      type: 'file',
+      file: '/surround.wav',
+      start: 10,
+      rate: 3
+    }
+  }
+};
+
+if (SpelaJSON.validate(file).length === 0) {
+  var player = new SpelaJSON(file);
+  player.play();
+}
+```
 
 
 ## API
