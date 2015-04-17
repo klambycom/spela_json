@@ -13,26 +13,26 @@ let file = {
       type: 'file',
       file: '/car.wav',
       start: 1.5,
-      end: 1.2935833333
+      end: 2.7935833333
     },
     '3': {
       type: 'file',
       file: '/crumple_paper.wav',
       start: 3,
-      end: 2.69875
+      end: 5.69875
     },
     '4': {
       type: 'file',
       file: '/mbira.wav',
       start: 5,
-      end: 47.3308125,
+      end: 52.3308125,
       rate: 4
     },
     '5': {
       type: 'file',
       file: '/surround.wav',
       start: 10,
-      end: 15.9999,
+      end: 25.9999,
       rate: 3
     }
   }
@@ -56,20 +56,20 @@ let file2 = {
       type: 'file',
       file: '/crumple_paper.wav',
       start: 3,
-      end: 2.69875
+      end: 5.69875
     },
     '4': {
       type: 'file',
       file: '/mbira.wav',
       start: 5,
-      end: 47.3308125,
+      end: 52.3308125,
       rate: 4
     },
     '5': {
       type: 'file',
       file: '/surround.wav',
       start: 10,
-      end: 15.9999,
+      end: 25.9999,
       rate: 3
     }
   }
