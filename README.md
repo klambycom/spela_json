@@ -1,4 +1,4 @@
-# SpelaJSON [![Dependencies badge][david-image]][david-url] [![DevDependencies badge][david-dev-image]][david-dev-url]
+# SpelaJSON [![DevDependencies badge][david-dev-image]][david-dev-url]
 
 SpelaJSON *(swedish for PlayJSON)*, plays JSON using
 [Web Audio API](http://webaudio.github.io/web-audio-api/). I use it togheter
