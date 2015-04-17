@@ -22,7 +22,13 @@ module.exports = function (context) {
   let files = [];
   let nr_of_loaded_files = 0;
   let duration = 0;
-  let builder = _builder(context, soundCache);
+
+  // Check if all files are loaded
+  let ready = function () {
+    return nr_of_loaded_files === files.length;
+  };
+
+  let builder = _builder(context, soundCache, () => duration, ready);
 
   // Load sound from file
   let loadSound = function (context, fn, url) {
@@ -53,11 +59,6 @@ module.exports = function (context) {
       .keys(json.data)
       .filter(isFile(json))
       .map(x => json.data[x]);
-  };
-
-  // Check if all files are loaded
-  let ready = function () {
-    return nr_of_loaded_files === files.length;
   };
 
   function ValidationException(errors) {
@@ -96,7 +97,7 @@ module.exports = function (context) {
         }, x.file);
       });
 
-      return builder(files, () => duration, ready);
+      return builder(files);
     },
 
     /**

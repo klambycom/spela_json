@@ -35,9 +35,9 @@ let buildSource = function (context, cache, file) {
   return source;
 };
 
-module.exports = function (context, cache) {
+module.exports = function (context, cache, duration, ready) {
 
-  return function (files, duration, ready) {
+  return function (files) {
 
     return {
 

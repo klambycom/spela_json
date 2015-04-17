@@ -43,13 +43,13 @@ describe('Builder', function () {
     spyOn(mock, 'playRate');
 
     // Create builder
-    var _builder = builder(contextMock, []);
+    var _builder = builder(contextMock, [], mock.duration, mock.ready);
 
     builder.__set__('buildSource', mock.buildSource);
     builder.__set__('playStart', mock.playStart);
     builder.__set__('playRate', mock.playRate);
 
-    sut = _builder(files, mock.duration, mock.ready);
+    sut = _builder(files);
 
     // Create builder without DI
     _builder = builder2(contextMock, []);
