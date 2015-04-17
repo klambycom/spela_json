@@ -13,6 +13,9 @@ var isNumber = function (x) {
 var isPositive = function (x) {
   return isNumber(x) && x >= 0;
 };
+var isObject = function (x) {
+  return typeof x === "object" && !(x instanceof Array);
+};
 
 var addError = function (errors, type, key) {
   return function (message) {
@@ -61,6 +64,15 @@ var validate = {
     }
     var error = addError(errors, "name", key);
     return error("name must be defined");
+  },
+
+  data: function data(_x, key, data) {
+    var errors = arguments[0] === undefined ? [] : arguments[0];
+    if (isDefined(data.data) && isObject(data.data)) {
+      return errors;
+    }
+    var error = addError(errors, "data", key);
+    return error("data must be an object");
   }
 };
 
@@ -70,6 +82,7 @@ module.exports = function () {
 
   // Meta
   errors = validate.name(errors, "name", json);
+  errors = validate.data(errors, "data", json);
 
   // Data
 

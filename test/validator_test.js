@@ -7,7 +7,7 @@ describe('Validator', function () {
     var data;
 
     beforeEach(function () {
-      data = { name: 'filen' };
+      data = { name: 'filen', data: { } };
     });
 
     it('should return empty array if no errors', function () {
@@ -18,6 +18,13 @@ describe('Validator', function () {
       delete data.name;
       expect(validator(data)).toEqual([
         { type: 'name', key: 'name', message: 'name must be defined' }
+      ]);
+    });
+
+    it('should create error if data-field is missing', function () {
+      delete data.data;
+      expect(validator(data)).toEqual([
+        { type: 'data', key: 'data', message: 'data must be an object' }
       ]);
     });
   });
@@ -131,6 +138,23 @@ describe('Validator', function () {
       expect(validatorFns.name([ ], 'id1', { })).toEqual([
         { type: 'name', key: 'id1', message: 'name must be defined' }
       ]);
+    });
+  });
+
+  describe('#data', function () {
+    it('should be defined', function () {
+      expect(validatorFns.data).toBeDefined();
+    });
+
+    it('should return empty array if valid', function () {
+      expect(validatorFns.data([ ], 'id1', { data: {} })).toEqual([ ]);
+    });
+
+    it('should return error if data is not an object', function () {
+      var error = { type: 'data', key: 'id1', message: 'data must be an object' };
+      expect(validatorFns.data([ ], 'id1', { data: 1 })).toEqual([ error ]);
+      expect(validatorFns.data([ ], 'id1', { data: [] })).toEqual([ error ]);
+      expect(validatorFns.data([ ], 'id1', { })).toEqual([ error ]);
     });
   });
 });
