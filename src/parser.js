@@ -17,7 +17,8 @@
 let _builder = require('./builder');
 let validator = require('./validator');
 
-let cutInParts = function (start, end, data) {
+let cutInParts = function (end, data) {
+  let start = 0;
   let parts = [];
 
   // Cut file
@@ -46,21 +47,15 @@ let cutInParts = function (start, end, data) {
 };
 
 let parseData = function (rows) {
+  return rows.map(row => {
+    row.offset = row.start;
+    row.parts = cutInParts(row.end - row.start, row);
 
-  rows = rows.map(function (row) {
-    let offset = row.start;
-    let start = row.start - offset;
-    let end = row.end - offset;
     delete row.start;
     delete row.end;
 
-    row.offset = offset;
-    row.parts = cutInParts(start, end, row);
-
     return row;
   });
-
-  return rows;
 };
 
 module.exports = function (context) {

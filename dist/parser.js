@@ -19,7 +19,8 @@
 var _builder = require("./builder");
 var validator = require("./validator");
 
-var cutInParts = function (start, end, data) {
+var cutInParts = function (end, data) {
+  var start = 0;
   var parts = [];
 
   // Cut file
@@ -54,20 +55,15 @@ var cutInParts = function (start, end, data) {
 };
 
 var parseData = function (rows) {
-  rows = rows.map(function (row) {
-    var offset = row.start;
-    var start = row.start - offset;
-    var end = row.end - offset;
+  return rows.map(function (row) {
+    row.offset = row.start;
+    row.parts = cutInParts(row.end - row.start, row);
+
     delete row.start;
     delete row.end;
 
-    row.offset = offset;
-    row.parts = cutInParts(start, end, row);
-
     return row;
   });
-
-  return rows;
 };
 
 module.exports = function (context) {
