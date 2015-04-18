@@ -52,6 +52,15 @@ describe('Validator', function () {
       ]);
     });
 
+    it('should return all errors', function () {
+      delete data.name;
+      delete data.data;
+      expect(validator(data)).toEqual([
+        { type: 'name', key: 'name', message: msg.name.missing },
+        { type: 'data', key: 'data', message: msg.data.obj }
+      ]);
+    });
+
     describe('data', function () {
       it('should create error if type is invalid', function () {
         data.data['1'].type = 'fil';
@@ -80,7 +89,7 @@ describe('Validator', function () {
       expect(validatorFns.type).toBeDefined();
     });
 
-    it('should return empty array when type is "file"', function () {
+    it('should return not create error when type is "file"', function () {
       expect(validatorFns.type([], 'id1', { type: 'file' })).toEqual([]);
     });
 
@@ -88,25 +97,25 @@ describe('Validator', function () {
       expect(validatorFns.type([errors], 'id1', { type: 'file' })).toEqual([errors]);
     });
 
-    it('should return error when type is wrong', function () {
+    it('should create error when type is wrong', function () {
       expect(validatorFns.type([], 'id1', { type: 'fil' })).toEqual([
           { type: 'type', key: 'id1', message: msg.type.invalid }
       ]);
     });
 
-    it('should return error when type is empty', function () {
+    it('should create error when type is empty', function () {
       expect(validatorFns.type([], 'id1', { type: '' })).toEqual([
           { type: 'type', key: 'id1', message: msg.type.missing }
       ]);
     });
 
-    it('should return error when type is undefined', function () {
+    it('should create error when type is undefined', function () {
       expect(validatorFns.type([], 'id1', { })).toEqual([
           { type: 'type', key: 'id1', message: msg.type.missing }
       ]);
     });
 
-    it('should return error when type is null', function () {
+    it('should create error when type is null', function () {
       expect(validatorFns.type([], 'id1', { type: null })).toEqual([
           { type: 'type', key: 'id1', message: msg.type.missing }
       ]);
@@ -125,7 +134,7 @@ describe('Validator', function () {
       expect(validatorFns.start).toBeDefined();
     });
 
-    it('should return empty array when start time is valid', function () {
+    it('should not create error when start time is valid', function () {
       expect(validatorFns.start([], 'id1', { start: 0 })).toEqual([]);
     });
 
@@ -133,7 +142,7 @@ describe('Validator', function () {
       expect(validatorFns.start([errors], 'id1', { start: 8 })).toEqual([errors]);
     });
 
-    it('should return error when start time is not a number', function () {
+    it('should create error when start time is not a number', function () {
       expect(validatorFns.start([], 'id1', { start: '' })).toEqual([
           { type: 'start', key: 'id1', message: msg.start.num }
       ]);
@@ -146,7 +155,7 @@ describe('Validator', function () {
       ]);
     });
 
-    it('should return error when start time is negative', function () {
+    it('should create error when start time is negative', function () {
       expect(validatorFns.start([], 'id1', { start: -1 })).toEqual([
           { type: 'start', key: 'id1', message: msg.start.zero }
       ]);
@@ -165,25 +174,25 @@ describe('Validator', function () {
       expect(validatorFns.end).toBeDefined();
     });
 
-    it('should not return error when end time is valid', function () {
+    it('should not create error when end time is valid', function () {
       expect(validatorFns.end([], 'id1', { start: 0, end: 10 })).toEqual([]);
     });
 
-    it('should return error when end time is lower than start time', function () {
+    it('should create error when end time is lower than start time', function () {
       expect(validatorFns.end([errors], 'id1', { start: 10, end: 1 })).toEqual([
           errors,
           { type: 'end', key: 'id1', message: msg.end.toLow }
       ]);
     });
 
-    it('should return error when end time is missing', function () {
+    it('should create error when end time is missing', function () {
       expect(validatorFns.end([errors], 'id1', { start: 0 })).toEqual([
           errors,
           { type: 'end', key: 'id1', message: msg.end.num }
       ]);
     });
 
-    it('should return error when end time is not a number', function () {
+    it('should create error when end time is not a number', function () {
       expect(validatorFns.end([errors], 'id1', { start: [] })).toEqual([
           errors,
           { type: 'end', key: 'id1', message: msg.end.num }
@@ -196,11 +205,11 @@ describe('Validator', function () {
       expect(validatorFns.name).toBeDefined();
     });
 
-    it('should return empty array if valid', function () {
+    it('should not create error if valid', function () {
       expect(validatorFns.name([ ], 'id1', { name: 'hej' })).toEqual([ ]);
     });
 
-    it('should return error if invalid', function () {
+    it('should create error if invalid', function () {
       expect(validatorFns.name([ ], 'id1', { })).toEqual([
         { type: 'name', key: 'id1', message: msg.name.missing }
       ]);
@@ -212,11 +221,11 @@ describe('Validator', function () {
       expect(validatorFns.data).toBeDefined();
     });
 
-    it('should return empty array if valid', function () {
+    it('should not create error if valid', function () {
       expect(validatorFns.data([ ], 'id1', { data: {} })).toEqual([ ]);
     });
 
-    it('should return error if data is not an object', function () {
+    it('should create error if data is not an object', function () {
       var error = { type: 'data', key: 'id1', message: msg.data.obj };
       expect(validatorFns.data([ ], 'id1', { data: 1 })).toEqual([ error ]);
       expect(validatorFns.data([ ], 'id1', { data: [] })).toEqual([ error ]);
