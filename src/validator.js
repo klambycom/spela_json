@@ -11,7 +11,7 @@ let addError = (errors, type, key) => {
 
 // Validation
 let validate = {
-  type(errors = [], key, data) {
+  type(key, data, errors = []) {
     // No error
     if (data.type === 'file') { return errors; }
     // Error
@@ -20,7 +20,7 @@ let validate = {
     return error('"' + data.type + '" is not a valid type');
   },
 
-  start(errors = [], key, data) {
+  start(key, data, errors = []) {
     // No error
     if (isPositive(data.start)) { return errors; }
     // Errors
@@ -29,19 +29,19 @@ let validate = {
     return error('start time must be at least zero');
   },
 
-  end(errors = [], key, data) {
+  end(key, data, errors = []) {
     if (isPositive(data.end) && data.end > data.start) { return errors; }
     let error = addError(errors, 'end', key);
     if (data.end <= data.start) { return error('end time must be larger than start time'); }
     return error('end time must be a number');
   },
 
-  name(errors = [], key, data) {
+  name(key, data, errors = []) {
     if (isDefined(data.name)) { return errors; }
     return addError(errors, 'name', key)('name must be included');
   },
 
-  data(errors = [], key, data) {
+  data(key, data, errors = []) {
     if (isDefined(data.data) && isObject(data.data)) { return errors; }
     return addError(errors, 'data', key)('data must be an object');
   }
@@ -51,17 +51,17 @@ module.exports = function (json = {}) {
   let errors = [];
 
   // Meta
-  errors = validate.name(errors, 'name', json);
-  errors = validate.data(errors, 'data', json);
+  errors = validate.name('name', json, errors);
+  errors = validate.data('data', json, errors);
   if (isUndefined(json.data) || !isObject(json.data)) { return errors; }
 
   // Data
   Object.keys(json.data).forEach(x => {
     let data = json.data[x];
 
-    errors = validate.type(errors, x, data);
-    errors = validate.start(errors, x, data);
-    errors = validate.end(errors, x, data);
+    errors = validate.type(x, data, errors);
+    errors = validate.start(x, data, errors);
+    errors = validate.end(x, data, errors);
   });
 
   return errors;

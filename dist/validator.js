@@ -25,8 +25,8 @@ var addError = function (errors, type, key) {
 
 // Validation
 var validate = {
-  type: function type(_x, key, data) {
-    var errors = arguments[0] === undefined ? [] : arguments[0];
+  type: function type(key, data) {
+    var errors = arguments[2] === undefined ? [] : arguments[2];
     // No error
     if (data.type === "file") {
       return errors;
@@ -39,8 +39,8 @@ var validate = {
     return error("\"" + data.type + "\" is not a valid type");
   },
 
-  start: function start(_x, key, data) {
-    var errors = arguments[0] === undefined ? [] : arguments[0];
+  start: function start(key, data) {
+    var errors = arguments[2] === undefined ? [] : arguments[2];
     // No error
     if (isPositive(data.start)) {
       return errors;
@@ -53,8 +53,8 @@ var validate = {
     return error("start time must be at least zero");
   },
 
-  end: function end(_x, key, data) {
-    var errors = arguments[0] === undefined ? [] : arguments[0];
+  end: function end(key, data) {
+    var errors = arguments[2] === undefined ? [] : arguments[2];
     if (isPositive(data.end) && data.end > data.start) {
       return errors;
     }
@@ -65,16 +65,16 @@ var validate = {
     return error("end time must be a number");
   },
 
-  name: function name(_x, key, data) {
-    var errors = arguments[0] === undefined ? [] : arguments[0];
+  name: function name(key, data) {
+    var errors = arguments[2] === undefined ? [] : arguments[2];
     if (isDefined(data.name)) {
       return errors;
     }
     return addError(errors, "name", key)("name must be included");
   },
 
-  data: function data(_x, key, data) {
-    var errors = arguments[0] === undefined ? [] : arguments[0];
+  data: function data(key, data) {
+    var errors = arguments[2] === undefined ? [] : arguments[2];
     if (isDefined(data.data) && isObject(data.data)) {
       return errors;
     }
@@ -87,8 +87,8 @@ module.exports = function () {
   var errors = [];
 
   // Meta
-  errors = validate.name(errors, "name", json);
-  errors = validate.data(errors, "data", json);
+  errors = validate.name("name", json, errors);
+  errors = validate.data("data", json, errors);
   if (isUndefined(json.data) || !isObject(json.data)) {
     return errors;
   }
@@ -97,9 +97,9 @@ module.exports = function () {
   Object.keys(json.data).forEach(function (x) {
     var data = json.data[x];
 
-    errors = validate.type(errors, x, data);
-    errors = validate.start(errors, x, data);
-    errors = validate.end(errors, x, data);
+    errors = validate.type(x, data, errors);
+    errors = validate.start(x, data, errors);
+    errors = validate.end(x, data, errors);
   });
 
   return errors;
