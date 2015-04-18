@@ -16,7 +16,7 @@ let validate = {
     if (data.type === 'file') { return errors; }
     // Error
     let error = addError(errors, 'type', key);
-    if (isUndefined(data.type)) { return error('type must be defined'); }
+    if (isUndefined(data.type)) { return error('type must be included'); }
     return error('"' + data.type + '" is not a valid type');
   },
 
@@ -38,7 +38,7 @@ let validate = {
 
   name(errors = [], key, data) {
     if (isDefined(data.name)) { return errors; }
-    return addError(errors, 'name', key)('name must be defined');
+    return addError(errors, 'name', key)('name must be included');
   },
 
   data(errors = [], key, data) {

@@ -4,11 +4,11 @@ var validatorFns = validator.__get__('validate');
 var audioJson = require('./fixtures/audio_json.js');
 
 var msg = {
-  name: { missing: 'name must be defined' },
+  name: { missing: 'name must be included' },
   data: { obj: 'data must be an object' },
   type: {
     invalid: '"fil" is not a valid type',
-    missing: 'type must be defined'
+    missing: 'type must be included'
   },
   start: {
     num: 'start time must be a number',
