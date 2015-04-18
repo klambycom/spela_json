@@ -24,6 +24,7 @@ var cutInParts = function (start, end, data) {
 
   // Cut file
   if (typeof data.cuts !== "undefined") {
+    // Create array from object, and delete the object
     var cuts = Object.keys(data.cuts).map(function (y) {
       return data.cuts[y];
     });
@@ -31,12 +32,14 @@ var cutInParts = function (start, end, data) {
 
     // TODO Sort cuts
 
+    // Cut out parts and change start time to after the cut
     parts = cuts.map(function (x) {
       var tmp = start;
       start = x.to;
       return { time: [tmp, x.from], edits: [] };
     });
 
+    // Add the last part, if last part is not cut out
     if (start < end) {
       parts.push({ time: [start, end], edits: [] });
     }
