@@ -46,17 +46,15 @@ let cutInParts = function (end, data) {
   return parts;
 };
 
-let parseData = function (rows) {
-  return rows.map(row => {
-    row.offset = row.start;
-    row.parts = cutInParts(row.end - row.start, row);
+let parseData = xs => xs.map(x => {
+  x.offset = x.start;
+  x.parts = cutInParts(x.end - x.start, x);
 
-    delete row.start;
-    delete row.end;
+  delete x.start;
+  delete x.end;
 
-    return row;
-  });
-};
+  return x;
+});
 
 module.exports = function (context) {
   let soundCache = {};
@@ -65,9 +63,7 @@ module.exports = function (context) {
   let duration = 0;
 
   // Check if all files are loaded
-  let ready = function () {
-    return nr_of_loaded_files === files.length;
-  };
+  let ready = () => nr_of_loaded_files === files.length;
 
   let builder = _builder(context, soundCache, () => duration, ready);
 
@@ -79,28 +75,22 @@ module.exports = function (context) {
       let req = new XMLHttpRequest();
       req.open('GET', url, true);
       req.responseType = 'arraybuffer';
-      req.addEventListener('load', function () {
-        context.decodeAudioData(req.response, function (buffer) {
-          soundCache[url] = buffer;
-          fn(buffer);
-        });
-      });
+      req.addEventListener('load', () => context.decodeAudioData(
+            req.response,
+            buffer => fn((soundCache[url] = buffer) && buffer))
+      );
       req.send();
     }
   };
 
   // Test if key is file
-  let isFile = function (json) {
-    return (key) => json.data[key].type === 'file';
-  };
+  let isFile = json => key => json.data[key].type === 'file';
 
   // Find files from JSON
-  let findFiles = function (json) {
-    return Object
-      .keys(json.data)
-      .filter(isFile(json))
-      .map(x => json.data[x]);
-  };
+  let findFiles = json => Object
+    .keys(json.data)
+    .filter(isFile(json))
+    .map(x => json.data[x]);
 
   function ValidationException(errors) {
     this.name = 'ValidationException';

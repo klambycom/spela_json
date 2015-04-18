@@ -54,15 +54,15 @@ var cutInParts = function (end, data) {
   return parts;
 };
 
-var parseData = function (rows) {
-  return rows.map(function (row) {
-    row.offset = row.start;
-    row.parts = cutInParts(row.end - row.start, row);
+var parseData = function (xs) {
+  return xs.map(function (x) {
+    x.offset = x.start;
+    x.parts = cutInParts(x.end - x.start, x);
 
-    delete row.start;
-    delete row.end;
+    delete x.start;
+    delete x.end;
 
-    return row;
+    return x;
   });
 };
 
@@ -91,9 +91,8 @@ module.exports = function (context) {
         req.open("GET", url, true);
         req.responseType = "arraybuffer";
         req.addEventListener("load", function () {
-          context.decodeAudioData(req.response, function (buffer) {
-            soundCache[url] = buffer;
-            fn(buffer);
+          return context.decodeAudioData(req.response, function (buffer) {
+            return fn((soundCache[url] = buffer) && buffer);
           });
         });
         req.send();
