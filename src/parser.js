@@ -17,6 +17,35 @@
 let _builder = require('./builder');
 let validator = require('./validator');
 
+let cutInParts = function (start, end, data) {
+  let parts = [];
+
+  // Cut file
+  if (typeof data.cuts !== 'undefined') {
+    let cuts = Object.keys(data.cuts).map(y => data.cuts[y]);
+    delete data.cuts;
+
+    // TODO Sort cuts
+
+    parts = cuts.map(x => {
+      let tmp = start;
+      start = x.to;
+      return { time: [tmp, x.from], edits: [] };
+    });
+
+    if (start < end) {
+      parts.push({ time: [start, end], edits: [] });
+    }
+  }
+
+  // Don't cut file
+  if (parts.length === 0) {
+    parts.push({ time: [ start, end ], edits: [] });
+  }
+
+  return parts;
+};
+
 let parseData = function (rows) {
 
   rows = rows.map(function (row) {
@@ -27,28 +56,7 @@ let parseData = function (rows) {
     delete row.end;
 
     row.offset = offset;
-    row.parts = [];
-
-    if (typeof row.cuts !== 'undefined') {
-      let cuts = Object.keys(row.cuts).map(y => row.cuts[y]);
-      delete row.cuts;
-
-      // TODO Sort cuts
-
-      row.parts = cuts.map(x => {
-        let tmp = start;
-        start = x.to;
-        return { time: [tmp, x.from], edits: [] };
-      });
-
-      if (start < end) {
-        row.parts.push({ time: [start, end], edits: [] });
-      }
-    }
-
-    if (row.parts.length === 0) {
-      row.parts.push({ time: [ start, end ], edits: [] });
-    }
+    row.parts = cutInParts(start, end, row);
 
     return row;
   });
