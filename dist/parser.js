@@ -19,17 +19,6 @@
 var _builder = require("./builder");
 var validator = require("./validator");
 
-// {
-//   "type": "file",
-//   "file": "./",
-//   "parts": [
-//     { "time": [0, 4], "edits": [] },
-//     { "time": [5, 8], "edits": [] },
-//     { "time": [10, 14], "edits": [ "rate": 3 ] },
-//     { "time": [15, 18], "edits": [] }
-//   ]
-// }
-
 var parseData = function (rows) {
   rows = rows.map(function (row) {
     var offset = row.start;
@@ -69,23 +58,6 @@ var parseData = function (rows) {
 
   return rows;
 };
-
-//console.log(parseData([
-//  { type: 'file', file: '/alien_phaser.wav', start: 0, end: 10 },
-//  { type: 'file', file: '/car.wav', start: 1.5, end: 10 },
-//  { type: 'file', file: '/crumple_paper.wav', start: 3, end: 10 },
-//  {
-//    type: 'file',
-//    file: '/mbira.wav',
-//    start: 0,
-//    end: 10,
-//    cuts: {
-//      '1': { from: 2, to: 3 },
-//      '2': { from: 5, to: 6 }
-//    }
-//  },
-//  { type: 'file', file: '/surround.wav', start: 3, end: 10 }
-//]));
 
 module.exports = function (context) {
   var soundCache = {};
