@@ -49,9 +49,9 @@ describe('Parser', function () {
       };
 
       expectedResult[0].parts = [
-        { time: [ 0, 2 ], edits: [  ] },
-        { time: [ 3, 5 ], edits: [  ] },
-        { time: [ 6, 10 ], edits: [  ] }
+        { time: [ 0, 2 ], edits: [  ], file: '/alien_phaser.wav', offset: 0 },
+        { time: [ 3, 5 ], edits: [  ], file: '/alien_phaser.wav', offset: 0 },
+        { time: [ 6, 10 ], edits: [  ], file: '/alien_phaser.wav', offset: 0 }
       ];
 
       expect(parseData(data)).toEqual(expectedResult);

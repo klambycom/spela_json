@@ -46,12 +46,24 @@ let cutInParts = function (end, data) {
   return parts;
 };
 
+let movePathAndOffset = file => file.parts.map(x => {
+  x.file = file.file;
+  x.offset = file.offset;
+  return x;
+});
+
 let parseData = xs => xs.map(x => {
   x.offset = x.start;
-  x.parts = cutInParts(x.end - x.start, x);
+
+  if (x.type === 'file') {
+    x.parts = cutInParts(x.end - x.start, x);
+    x.parts = movePathAndOffset(x);
+  }
 
   delete x.start;
   delete x.end;
+  delete x.file;
+  delete x.offset;
 
   return x;
 });

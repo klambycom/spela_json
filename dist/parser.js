@@ -56,13 +56,27 @@ var cutInParts = function (end, data) {
   return parts;
 };
 
+var movePathAndOffset = function (file) {
+  return file.parts.map(function (x) {
+    x.file = file.file;
+    x.offset = file.offset;
+    return x;
+  });
+};
+
 var parseData = function (xs) {
   return xs.map(function (x) {
     x.offset = x.start;
-    x.parts = cutInParts(x.end - x.start, x);
+
+    if (x.type === "file") {
+      x.parts = cutInParts(x.end - x.start, x);
+      x.parts = movePathAndOffset(x);
+    }
 
     delete x.start;
     delete x.end;
+    delete x.file;
+    delete x.offset;
 
     return x;
   });
