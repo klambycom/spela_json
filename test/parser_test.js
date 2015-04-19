@@ -36,16 +36,13 @@ describe('Parser', function () {
     beforeEach(function () {
       data = fileArray();
       expectedResult = parserResult();
-      result = parseData(data);
     });
 
     it('should parse the data', function () {
-      expect(result).toEqual(expectedResult);
+      expect(parseData(data)).toEqual(expectedResult);
     });
 
     it('should sort the cuts/parts', function () {
-      data = fileArray();
-
       data[0].cuts = {
         '1': { from: 5, to: 6 },
         '2': { from: 2, to: 3 }
