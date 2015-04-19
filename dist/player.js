@@ -175,7 +175,7 @@ var Player = (function () {
 
         this._json_data = cloneObject(json);
         this._sources = []; // Reset buffer sources
-        this._parsed = this._AJSON.parse(json);
+        this._parsed = this._AJSON.parse(cloneObject(json));
       },
       writable: true,
       configurable: true
