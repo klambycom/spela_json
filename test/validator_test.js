@@ -36,6 +36,12 @@ var invalid = function (fn, text, obj) {
   };
 };
 
+var defined = function (fn) {
+  it('should have a ' + fn + '-validator function', function () {
+    expect(validatorFns[fn]).toBeDefined();
+  });
+};
+
 describe('Validator', function () {
   describe('JSON', function () {
     var data;
@@ -95,9 +101,7 @@ describe('Validator', function () {
   });
 
   describe('#type', function () {
-    it('should have type-function', function () {
-      expect(validatorFns.type).toBeDefined();
-    });
+    defined('type');
 
     it('should return not create error when type is "file"', valid('type', { type: 'file' }));
     it('should create error when type is wrong', invalid('type', 'invalid', { type: 'fil' }));
@@ -109,9 +113,7 @@ describe('Validator', function () {
   });
 
   describe('#start', function () {
-    it('should have start-function', function () {
-      expect(validatorFns.start).toBeDefined();
-    });
+    defined('start');
 
     it('should not create error when start time is valid', valid('start', { start: 0 }));
     it('should return old errors when start time is valid', valid('start', { start: 8 }));
@@ -130,9 +132,7 @@ describe('Validator', function () {
   });
 
   describe('#end', function () {
-    it('should have end-function', function () {
-      expect(validatorFns.end).toBeDefined();
-    });
+    defined('end');
 
     it('should not create error when end time is valid', valid('end', { start: 0, end: 10 }));
 
@@ -143,18 +143,14 @@ describe('Validator', function () {
   });
 
   describe('#name', function () {
-    it('should be defined', function () {
-      expect(validatorFns.name).toBeDefined();
-    });
+    defined('name');
 
     it('should not create error if valid', valid('name', { name: 'hej' }));
     it('should create error if invalid', invalid('name', 'missing', {}));
   });
 
   describe('#data', function () {
-    it('should be defined', function () {
-      expect(validatorFns.data).toBeDefined();
-    });
+    defined('data');
 
     it('should not create error if valid', valid('data', { data: {} }));
 
@@ -167,9 +163,7 @@ describe('Validator', function () {
   });
 
   describe('#cuts', function () {
-    it('should be defined', function () {
-      expect(validatorFns.cuts).toBeDefined();
-    });
+    defined('cuts');
 
     it('should not create error if cuts is a object', valid('cuts', { cuts: {} }));
     it('should not create error if cuts is missing', valid('cuts', {}));
