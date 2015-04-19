@@ -6,6 +6,7 @@ var audioJson = require('./fixtures/audio_json.js');
 var msg = {
   name: { missing: 'name must be included' },
   data: { obj: 'data must be an object' },
+  cuts: { obj: 'cuts must be an object' },
   type: {
     invalid: '"fil" is not a valid type',
     missing: 'type must be included'
@@ -230,6 +231,25 @@ describe('Validator', function () {
       expect(validatorFns.data('id1', { data: 1 }, [])).toEqual([ error ]);
       expect(validatorFns.data('id1', { data: [] }, [])).toEqual([ error ]);
       expect(validatorFns.data('id1', { }, [])).toEqual([ error ]);
+    });
+  });
+
+  describe('#cuts', function () {
+    it('should be defined', function () {
+      expect(validatorFns.cuts).toBeDefined();
+    });
+
+    it('should not create error if cuts is a object', function () {
+      expect(validatorFns.cuts('id1', { cuts: {} }, [errors])).toEqual([errors]);
+    });
+
+    it('should not create error if cuts is missing', function () {
+      expect(validatorFns.cuts('id1', { }, [errors])).toEqual([errors]);
+    });
+
+    it('should create error if data is not an object', function () {
+      var error = { type: 'cuts', key: 'id1', message: msg.cuts.obj };
+      expect(validatorFns.cuts('id1', { cuts: [] }, [errors])).toEqual([errors, error]);
     });
   });
 });
