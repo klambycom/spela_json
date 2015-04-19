@@ -159,7 +159,7 @@ module.exports = function (context) {
 
       //parseData(files);
 
-      return builder(files);
+      return builder(parseData(files));
     },
 
     /**

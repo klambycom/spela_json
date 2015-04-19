@@ -20,7 +20,7 @@
 // Start playing on right position
 var playStart = function (context, source, file) {
   source.connect(context.destination);
-  source.start(file.start);
+  source.start(file.offset, file.time[0], file.time[1] - file.time[0]);
 };
 
 // Change play rate
@@ -47,7 +47,15 @@ module.exports = function (context, cache, duration, ready) {
        */
 
       play: function play() {
-        return files.map(function (x) {
+        var parts = files.filter(function (x) {
+          return x.type === "file";
+        }).map(function (x) {
+          return x.parts;
+        }).reduce(function (acc, x) {
+          return acc.concat(x);
+        }, []);
+
+        return parts.map(function (x) {
           var source = buildSource(context, cache, x);
 
           playRate(context, source, x); // Choose play rate
