@@ -26,7 +26,8 @@ let cutInParts = function (end, data) {
     let cuts = Object.keys(data.cuts).map(y => data.cuts[y]);
     delete data.cuts;
 
-    // TODO Sort cuts
+    // Sort cuts
+    cuts.sort((a, b) => a.from - b.from);
 
     // Cut out parts and change start time to after the cut
     parts = cuts.map(x => {

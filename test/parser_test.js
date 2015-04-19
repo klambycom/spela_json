@@ -31,16 +31,33 @@ describe('Parser', function () {
   });
 
   describe('Parse data', function () {
-    var result, expectedResult;
+    var data, result, expectedResult;
 
     beforeEach(function () {
-      var data = fileArray();
+      data = fileArray();
       expectedResult = parserResult();
       result = parseData(data);
     });
 
     it('should parse the data', function () {
       expect(result).toEqual(expectedResult);
+    });
+
+    it('should sort the cuts/parts', function () {
+      data = fileArray();
+
+      data[0].cuts = {
+        '1': { from: 5, to: 6 },
+        '2': { from: 2, to: 3 }
+      };
+
+      expectedResult[0].parts = [
+        { time: [ 0, 2 ], edits: [  ] },
+        { time: [ 3, 5 ], edits: [  ] },
+        { time: [ 6, 10 ], edits: [  ] }
+      ];
+
+      expect(parseData(data)).toEqual(expectedResult);
     });
   });
 });

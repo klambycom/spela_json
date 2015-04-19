@@ -30,7 +30,10 @@ var cutInParts = function (end, data) {
     });
     delete data.cuts;
 
-    // TODO Sort cuts
+    // Sort cuts
+    cuts.sort(function (a, b) {
+      return a.from - b.from;
+    });
 
     // Cut out parts and change start time to after the cut
     parts = cuts.map(function (x) {
