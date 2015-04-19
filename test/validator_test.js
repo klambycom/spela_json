@@ -90,33 +90,33 @@ describe('Validator', function () {
       it('should create error if type is invalid', function () {
         data.data['1'].type = 'fil';
         expect(validator(data))
-          .toEqual([{ type: 'type', key: '1', message: msg.type.invalid }]);
+          .toEqual([{ type: 'type', key: 'row(1)', message: msg.type.invalid }]);
       });
 
       it('should create error if start is invalid', function () {
         data.data['1'].start = -2;
         expect(validator(data))
-          .toEqual([{ type: 'start', key: '1', message: msg.start.zero }]);
+          .toEqual([{ type: 'start', key: 'row(1)', message: msg.start.zero }]);
       });
 
       it('should create error if end-field is missing', function () {
         delete data.data['2'].end;
         expect(validator(data)).toEqual([
-          { type: 'end', key: '2', message: msg.end.num }
+          { type: 'end', key: 'row(2)', message: msg.end.num }
         ]);
       });
 
       it('should create error if end-field is missing', function () {
         data.data['2'].cuts = 1;
         expect(validator(data)).toEqual([
-          { type: 'cuts', key: '2', message: msg.cuts.obj }
+          { type: 'cuts', key: 'row(2)', message: msg.cuts.obj }
         ]);
       });
 
       it('should create error if file-field is missing when type is file', function () {
         delete data.data['3'].file;
         expect(validator(data)).toEqual([
-          { type: 'file', key: '3', message: msg.file.missing }
+          { type: 'file', key: 'row(3)', message: msg.file.missing }
         ]);
       });
 
@@ -124,14 +124,14 @@ describe('Validator', function () {
         it('should create error if effects-field is not an object', function () {
           data.data['2'].effects = true;
           expect(validator(data)).toEqual([
-              { type: 'effects', key: '2', message: msg.effects.obj }
+              { type: 'effects', key: 'row(2)', message: msg.effects.obj }
           ]);
         });
 
         it('should create error if type is wrong', function () {
           data.data['2'].effects = { '1': { type: 'joe' } };
           expect(validator(data)).toEqual([
-            { type: 'effectType', key: '2, effect(1)', message: msg.effectType.invalid }
+            { type: 'effectType', key: 'row(2), effect(1)', message: msg.effectType.invalid }
           ]);
         });
       });

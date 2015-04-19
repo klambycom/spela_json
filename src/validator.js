@@ -84,18 +84,18 @@ module.exports = function (json = {}) {
   Object.keys(json.data).forEach(x => {
     let data = json.data[x];
 
-    errors = validate.type(x, data, errors);
-    errors = validate.start(x, data, errors);
-    errors = validate.end(x, data, errors);
-    errors = validate.cuts(x, data, errors);
-    errors = validate.effects(x, data, errors);
-    errors = validate.file(x, data, errors);
+    errors = validate.type(`row(${x})`, data, errors);
+    errors = validate.start(`row(${x})`, data, errors);
+    errors = validate.end(`row(${x})`, data, errors);
+    errors = validate.cuts(`row(${x})`, data, errors);
+    errors = validate.effects(`row(${x})`, data, errors);
+    errors = validate.file(`row(${x})`, data, errors);
 
     if (isUndefined(data.effects) || !isObject(data.effects)) { return; }
     Object.keys(data.effects).forEach(y => {
       let effect = data.effects[y];
 
-      errors = validate.effectType(`${x}, effect(${y})`, effect, errors);
+      errors = validate.effectType(`row(${x}), effect(${y})`, effect, errors);
     });
   });
 

@@ -140,12 +140,12 @@ module.exports = function () {
   Object.keys(json.data).forEach(function (x) {
     var data = json.data[x];
 
-    errors = validate.type(x, data, errors);
-    errors = validate.start(x, data, errors);
-    errors = validate.end(x, data, errors);
-    errors = validate.cuts(x, data, errors);
-    errors = validate.effects(x, data, errors);
-    errors = validate.file(x, data, errors);
+    errors = validate.type("row(" + x + ")", data, errors);
+    errors = validate.start("row(" + x + ")", data, errors);
+    errors = validate.end("row(" + x + ")", data, errors);
+    errors = validate.cuts("row(" + x + ")", data, errors);
+    errors = validate.effects("row(" + x + ")", data, errors);
+    errors = validate.file("row(" + x + ")", data, errors);
 
     if (isUndefined(data.effects) || !isObject(data.effects)) {
       return;
@@ -153,7 +153,7 @@ module.exports = function () {
     Object.keys(data.effects).forEach(function (y) {
       var effect = data.effects[y];
 
-      errors = validate.effectType("" + x + ", effect(" + y + ")", effect, errors);
+      errors = validate.effectType("row(" + x + "), effect(" + y + ")", effect, errors);
     });
   });
 
