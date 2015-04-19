@@ -3,6 +3,13 @@ var validator = rewire('../dist/validator.js');
 var validatorFns = validator.__get__('validate');
 var audioJson = require('./fixtures/audio_json.js');
 
+var valid = function (fn, obj) {
+  return function () {
+    var errors = { type: 'type', key: 'id1', message: msg.type.invalid };
+    expect(validatorFns[fn]('id1', obj, [errors])).toEqual([errors]);
+  };
+};
+
 var msg = {
   name: { missing: 'name must be included' },
   data: { obj: 'data must be an object' },
@@ -90,13 +97,7 @@ describe('Validator', function () {
       expect(validatorFns.type).toBeDefined();
     });
 
-    it('should return not create error when type is "file"', function () {
-      expect(validatorFns.type('id1', { type: 'file' }, [])).toEqual([]);
-    });
-
-    it('should return old errors when data is valid', function () {
-      expect(validatorFns.type('id1', { type: 'file' }, [errors])).toEqual([errors]);
-    });
+    it('should return not create error when type is "file"', valid('type', { type: 'file' }));
 
     it('should create error when type is wrong', function () {
       expect(validatorFns.type('id1', { type: 'fil' }, [])).toEqual([
@@ -135,13 +136,8 @@ describe('Validator', function () {
       expect(validatorFns.start).toBeDefined();
     });
 
-    it('should not create error when start time is valid', function () {
-      expect(validatorFns.start('id1', { start: 0 }, [])).toEqual([]);
-    });
-
-    it('should return old errors when start time is valid', function () {
-      expect(validatorFns.start('id1', { start: 8 }, [errors])).toEqual([errors]);
-    });
+    it('should not create error when start time is valid', valid('start', { start: 0 }));
+    it('should return old errors when start time is valid', valid('start', { start: 8 }));
 
     it('should create error when start time is not a number', function () {
       expect(validatorFns.start('id1', { start: '' }, [])).toEqual([
@@ -175,9 +171,7 @@ describe('Validator', function () {
       expect(validatorFns.end).toBeDefined();
     });
 
-    it('should not create error when end time is valid', function () {
-      expect(validatorFns.end('id1', { start: 0, end: 10 }, [])).toEqual([]);
-    });
+    it('should not create error when end time is valid', valid('end', { start: 0, end: 10 }));
 
     it('should create error when end time is lower than start time', function () {
       expect(validatorFns.end('id1', { start: 10, end: 1 }, [errors])).toEqual([
@@ -206,9 +200,7 @@ describe('Validator', function () {
       expect(validatorFns.name).toBeDefined();
     });
 
-    it('should not create error if valid', function () {
-      expect(validatorFns.name('id1', { name: 'hej' }, [])).toEqual([ ]);
-    });
+    it('should not create error if valid', valid('name', { name: 'hej' }));
 
     it('should create error if invalid', function () {
       expect(validatorFns.name('id1', { }, [])).toEqual([
@@ -222,9 +214,7 @@ describe('Validator', function () {
       expect(validatorFns.data).toBeDefined();
     });
 
-    it('should not create error if valid', function () {
-      expect(validatorFns.data('id1', { data: {} }, [])).toEqual([ ]);
-    });
+    it('should not create error if valid', valid('data', { data: {} }));
 
     it('should create error if data is not an object', function () {
       var error = { type: 'data', key: 'id1', message: msg.data.obj };
@@ -239,13 +229,8 @@ describe('Validator', function () {
       expect(validatorFns.cuts).toBeDefined();
     });
 
-    it('should not create error if cuts is a object', function () {
-      expect(validatorFns.cuts('id1', { cuts: {} }, [errors])).toEqual([errors]);
-    });
-
-    it('should not create error if cuts is missing', function () {
-      expect(validatorFns.cuts('id1', { }, [errors])).toEqual([errors]);
-    });
+    it('should not create error if cuts is a object', valid('cuts', { cuts: {} }));
+    it('should not create error if cuts is missing', valid('cuts', {}));
 
     it('should create error if data is not an object', function () {
       var error = { type: 'cuts', key: 'id1', message: msg.cuts.obj };
