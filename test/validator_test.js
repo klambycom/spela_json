@@ -3,13 +3,6 @@ var validator = rewire('../dist/validator.js');
 var validatorFns = validator.__get__('validate');
 var audioJson = require('./fixtures/audio_json.js');
 
-var valid = function (fn, obj) {
-  return function () {
-    var errors = { type: 'type', key: 'id1', message: msg.type.invalid };
-    expect(validatorFns[fn]('id1', obj, [errors])).toEqual([errors]);
-  };
-};
-
 var msg = {
   name: { missing: 'name must be included' },
   data: { obj: 'data must be an object' },
@@ -28,13 +21,22 @@ var msg = {
   }
 };
 
+var errors = { type: 'fake', key: 'id1', message: 'fake error' };
+
+var valid = function (fn, obj) {
+  return function () {
+    expect(validatorFns[fn]('id1', obj, [errors])).toEqual([errors]);
+  };
+};
+
+var invalid = function (fn, text, obj) {
+  return function () {
+    var error = { type: fn, key: 'id1', message: msg[fn][text] };
+    expect(validatorFns[fn]('id1', obj, [errors])).toEqual([errors, error]);
+  };
+};
+
 describe('Validator', function () {
-  var errors;
-
-  beforeEach(function () {
-    errors = { type: 'type', key: 'id1', message: msg.type.invalid };
-  });
-
   describe('JSON', function () {
     var data;
 
@@ -98,37 +100,12 @@ describe('Validator', function () {
     });
 
     it('should return not create error when type is "file"', valid('type', { type: 'file' }));
-
-    it('should create error when type is wrong', function () {
-      expect(validatorFns.type('id1', { type: 'fil' }, [])).toEqual([
-          { type: 'type', key: 'id1', message: msg.type.invalid }
-      ]);
-    });
-
-    it('should create error when type is empty', function () {
-      expect(validatorFns.type('id1', { type: '' }, [])).toEqual([
-          { type: 'type', key: 'id1', message: msg.type.missing }
-      ]);
-    });
-
-    it('should create error when type is undefined', function () {
-      expect(validatorFns.type('id1', { }, [])).toEqual([
-          { type: 'type', key: 'id1', message: msg.type.missing }
-      ]);
-    });
-
-    it('should create error when type is null', function () {
-      expect(validatorFns.type('id1', { type: null }, [])).toEqual([
-          { type: 'type', key: 'id1', message: msg.type.missing }
-      ]);
-    });
-
-    it('should return old and new errors when data is invalid', function () {
-      expect(validatorFns.type('id1', { type: '' }, [errors])).toEqual([
-          errors,
-          { type: 'type', key: 'id1', message: msg.type.missing }
-      ]);
-    });
+    it('should create error when type is wrong', invalid('type', 'invalid', { type: 'fil' }));
+    it('should create error when type is empty', invalid('type', 'missing', { type: '' }));
+    it('should create error when type is undefined', invalid('type', 'missing', {}));
+    it('should create error when type is null', invalid('type', 'missing', { type: null }));
+    it('should return old and new errors when data is invalid',
+        invalid('type', 'missing', { type: '' }));
   });
 
   describe('#start', function () {
@@ -139,31 +116,17 @@ describe('Validator', function () {
     it('should not create error when start time is valid', valid('start', { start: 0 }));
     it('should return old errors when start time is valid', valid('start', { start: 8 }));
 
-    it('should create error when start time is not a number', function () {
-      expect(validatorFns.start('id1', { start: '' }, [])).toEqual([
-          { type: 'start', key: 'id1', message: msg.start.num }
-      ]);
-    });
+    it('should create error when start time is not a number',
+        invalid('start', 'num', { start: '' }));
 
-    it('should return old errors and new error when start time is not a number', function () {
-      expect(validatorFns.start('id1', { start: '' }, [errors])).toEqual([
-          errors,
-          { type: 'start', key: 'id1', message: msg.start.num }
-      ]);
-    });
+    it('should return old errors and new error when start time is not a number',
+        invalid('start', 'num', { start: '' }));
 
-    it('should create error when start time is negative', function () {
-      expect(validatorFns.start('id1', { start: -1 }, [])).toEqual([
-          { type: 'start', key: 'id1', message: msg.start.zero }
-      ]);
-    });
+    it('should create error when start time is negative',
+        invalid('start', 'zero', { start: -1 }));
 
-    it('should return old errors and new error when start time is negative', function () {
-      expect(validatorFns.start('id1', { start: -5 }, [errors])).toEqual([
-          errors,
-          { type: 'start', key: 'id1', message: msg.start.zero }
-      ]);
-    });
+    it('should return old errors and new error when start time is negative',
+        invalid('start', 'zero', { start: -5 }));
   });
 
   describe('#end', function () {
@@ -173,26 +136,10 @@ describe('Validator', function () {
 
     it('should not create error when end time is valid', valid('end', { start: 0, end: 10 }));
 
-    it('should create error when end time is lower than start time', function () {
-      expect(validatorFns.end('id1', { start: 10, end: 1 }, [errors])).toEqual([
-          errors,
-          { type: 'end', key: 'id1', message: msg.end.toLow }
-      ]);
-    });
-
-    it('should create error when end time is missing', function () {
-      expect(validatorFns.end('id1', { start: 0 }, [errors])).toEqual([
-          errors,
-          { type: 'end', key: 'id1', message: msg.end.num }
-      ]);
-    });
-
-    it('should create error when end time is not a number', function () {
-      expect(validatorFns.end('id1', { start: [] }, [errors])).toEqual([
-          errors,
-          { type: 'end', key: 'id1', message: msg.end.num }
-      ]);
-    });
+    it('should create error when end time is lower than start time',
+        invalid('end', 'toLow', { start: 10, end: 1 }));
+    it('should create error when end time is missing', invalid('end', 'num', { start: 0 }));
+    it('should create error when end time is not a number', invalid('end', 'num', { start: [] }));
   });
 
   describe('#name', function () {
@@ -201,12 +148,7 @@ describe('Validator', function () {
     });
 
     it('should not create error if valid', valid('name', { name: 'hej' }));
-
-    it('should create error if invalid', function () {
-      expect(validatorFns.name('id1', { }, [])).toEqual([
-        { type: 'name', key: 'id1', message: msg.name.missing }
-      ]);
-    });
+    it('should create error if invalid', invalid('name', 'missing', {}));
   });
 
   describe('#data', function () {
@@ -231,10 +173,6 @@ describe('Validator', function () {
 
     it('should not create error if cuts is a object', valid('cuts', { cuts: {} }));
     it('should not create error if cuts is missing', valid('cuts', {}));
-
-    it('should create error if data is not an object', function () {
-      var error = { type: 'cuts', key: 'id1', message: msg.cuts.obj };
-      expect(validatorFns.cuts('id1', { cuts: [] }, [errors])).toEqual([errors, error]);
-    });
+    it('should create error if data is not an object', invalid('cuts', 'obj', { cuts: [] }));
   });
 });
