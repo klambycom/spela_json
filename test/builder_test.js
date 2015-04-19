@@ -23,7 +23,7 @@ describe('Builder', function () {
     files = [
       { type: 'file', parts: [{ file: '', time: [0, 1], offset: 0 }] },
       { type: 'file', parts: [{ file: '', time: [1, 4], offset: 0 }] },
-      { type: 'file', parts: [{ file: '', time: [5, 7], offset: 0 }] },
+      { type: 'file', parts: [{ file: '', time: [5, 7], offset: 1 }] },
       { type: 'file', parts: [{ file: '', time: [9, 11], offset: 0 }] }
     ];
 
@@ -106,10 +106,10 @@ describe('Builder', function () {
       });
 
       it('should set start time', function () {
-        expect(sourceMock.start).toHaveBeenCalledWith(0);
-        expect(sourceMock.start).toHaveBeenCalledWith(1);
-        expect(sourceMock.start).toHaveBeenCalledWith(5);
-        expect(sourceMock.start).toHaveBeenCalledWith(9);
+        expect(sourceMock.start).toHaveBeenCalledWith(0, 0, 1);
+        expect(sourceMock.start).toHaveBeenCalledWith(0, 1, 3);
+        expect(sourceMock.start).toHaveBeenCalledWith(1, 5, 2);
+        expect(sourceMock.start).toHaveBeenCalledWith(0, 9, 2);
       });
     });
   });
