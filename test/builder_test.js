@@ -21,10 +21,10 @@ describe('Builder', function () {
     };
 
     files = [
-      { type: 'file', file: '', start: 0 },
-      { type: 'file', file: '', start: 1 },
-      { type: 'file', file: '', start: 5 },
-      { type: 'file', file: '', start: 9 }
+      { type: 'file', parts: [{ file: '', time: [0, 1], offset: 0 }] },
+      { type: 'file', parts: [{ file: '', time: [1, 4], offset: 0 }] },
+      { type: 'file', parts: [{ file: '', time: [5, 7], offset: 0 }] },
+      { type: 'file', parts: [{ file: '', time: [9, 11], offset: 0 }] }
     ];
 
     mock = {
