@@ -87,6 +87,14 @@ var validate = {
       return errors;
     }
     return addError(errors, "cuts", key)("cuts must be an object");
+  },
+
+  effects: function effects(key, data) {
+    var errors = arguments[2] === undefined ? [] : arguments[2];
+    if (isUndefined(data.effects) || isObject(data.effects)) {
+      return errors;
+    }
+    return addError(errors, "effects", key)("effects must be an object");
   }
 };
 

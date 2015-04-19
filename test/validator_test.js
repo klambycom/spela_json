@@ -7,6 +7,7 @@ var msg = {
   name: { missing: 'name must be included' },
   data: { obj: 'data must be an object' },
   cuts: { obj: 'cuts must be an object' },
+  effects: { obj: 'effects must be an object' },
   type: {
     invalid: '"fil" is not a valid type',
     missing: 'type must be included'
@@ -168,5 +169,14 @@ describe('Validator', function () {
     it('should not create error if cuts is a object', valid('cuts', { cuts: {} }));
     it('should not create error if cuts is missing', valid('cuts', {}));
     it('should create error if data is not an object', invalid('cuts', 'obj', { cuts: [] }));
+  });
+
+  describe('#effects', function () {
+    defined('effects');
+
+    it('should not create error if effects is a object', valid('effects', { effects: {} }));
+    it('should not create error if effects is missing', valid('effects', {}));
+    it('should create error if effects is not an object',
+        invalid('effects', 'obj', { effects: [] }));
   });
 });

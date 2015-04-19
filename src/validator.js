@@ -49,6 +49,11 @@ let validate = {
   cuts(key, data, errors = []) {
     if (isUndefined(data.cuts) || isObject(data.cuts)) { return errors; }
     return addError(errors, 'cuts', key)('cuts must be an object');
+  },
+
+  effects(key, data, errors = []) {
+    if (isUndefined(data.effects) || isObject(data.effects)) { return errors; }
+    return addError(errors, 'effects', key)('effects must be an object');
   }
 };
 
