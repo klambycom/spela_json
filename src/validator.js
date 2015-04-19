@@ -4,6 +4,7 @@ let isDefined = x => !isUndefined(x);
 let isNumber = x => typeof x === 'number';
 let isPositive = x => isNumber(x) && x >= 0;
 let isObject = x => typeof x === 'object' && !(x instanceof Array);
+let isString = x => typeof x === 'string';
 
 let addError = (errors, type, key) => {
   return message => errors.push({ type, key, message }) && errors;
@@ -54,6 +55,13 @@ let validate = {
   effects(key, data, errors = []) {
     if (isUndefined(data.effects) || isObject(data.effects)) { return errors; }
     return addError(errors, 'effects', key)('effects must be an object');
+  },
+
+  file(key, data, errors = []) {
+    if (data.type !== 'file' || (data.type === 'file' && isString(data.file))) { return errors; }
+    let error = addError(errors, 'file', key);
+    if (isUndefined(data.file)) { return error('file must be included when type is file'); }
+    return error('file must be a string');
   }
 };
 
@@ -74,6 +82,7 @@ module.exports = function (json = {}) {
     errors = validate.end(x, data, errors);
     errors = validate.cuts(x, data, errors);
     errors = validate.effects(x, data, errors);
+    errors = validate.file(x, data, errors);
   });
 
   return errors;

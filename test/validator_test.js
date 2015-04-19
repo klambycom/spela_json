@@ -19,6 +19,10 @@ var msg = {
   end: {
     toLow: 'end time must be larger than start time',
     num: 'end time must be a number'
+  },
+  file: {
+    string: 'file must be a string',
+    missing: 'file must be included when type is file'
   }
 };
 
@@ -111,6 +115,13 @@ describe('Validator', function () {
           { type: 'effects', key: '2', message: msg.effects.obj }
         ]);
       });
+
+      it('should create error if file-field is missing when type is file', function () {
+        delete data.data['3'].file;
+        expect(validator(data)).toEqual([
+          { type: 'file', key: '3', message: msg.file.missing }
+        ]);
+      });
     });
   });
 
@@ -191,5 +202,17 @@ describe('Validator', function () {
     it('should not create error if effects is missing', valid('effects', {}));
     it('should create error if effects is not an object',
         invalid('effects', 'obj', { effects: [] }));
+  });
+
+  describe('#file', function () {
+    defined('file');
+
+    it('should not create error if file is a string',
+        valid('file', { type: 'file', file: 'fdsa.mp3' }));
+    it('should not create error if type is not file', valid('file', { type: 'babel' }));
+    it('should create error if file is not a string',
+        invalid('file', 'string', { type: 'file', file: {} }));
+    it('should create error if file is missing',
+        invalid('file', 'missing', { type: 'file' }));
   });
 });

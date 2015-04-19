@@ -16,6 +16,9 @@ var isPositive = function (x) {
 var isObject = function (x) {
   return typeof x === "object" && !(x instanceof Array);
 };
+var isString = function (x) {
+  return typeof x === "string";
+};
 
 var addError = function (errors, type, key) {
   return function (message) {
@@ -95,6 +98,18 @@ var validate = {
       return errors;
     }
     return addError(errors, "effects", key)("effects must be an object");
+  },
+
+  file: function file(key, data) {
+    var errors = arguments[2] === undefined ? [] : arguments[2];
+    if (data.type !== "file" || data.type === "file" && isString(data.file)) {
+      return errors;
+    }
+    var error = addError(errors, "file", key);
+    if (isUndefined(data.file)) {
+      return error("file must be included when type is file");
+    }
+    return error("file must be a string");
   }
 };
 
@@ -118,6 +133,7 @@ module.exports = function () {
     errors = validate.end(x, data, errors);
     errors = validate.cuts(x, data, errors);
     errors = validate.effects(x, data, errors);
+    errors = validate.file(x, data, errors);
   });
 
   return errors;
