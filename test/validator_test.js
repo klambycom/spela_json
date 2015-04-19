@@ -12,6 +12,10 @@ var msg = {
     invalid: '"fil" is not a valid type',
     missing: 'type must be included'
   },
+  effectType: {
+    invalid: '"joe" is not a valid type',
+    type: 'type must be included'
+  },
   start: {
     num: 'start time must be a number',
     zero: 'start time must be at least zero'
@@ -109,18 +113,27 @@ describe('Validator', function () {
         ]);
       });
 
-      it('should create error if end-field is missing', function () {
-        data.data['2'].effects = true;
-        expect(validator(data)).toEqual([
-          { type: 'effects', key: '2', message: msg.effects.obj }
-        ]);
-      });
-
       it('should create error if file-field is missing when type is file', function () {
         delete data.data['3'].file;
         expect(validator(data)).toEqual([
           { type: 'file', key: '3', message: msg.file.missing }
         ]);
+      });
+
+      describe('effects', function () {
+        it('should create error if effects-field is not an object', function () {
+          data.data['2'].effects = true;
+          expect(validator(data)).toEqual([
+              { type: 'effects', key: '2', message: msg.effects.obj }
+          ]);
+        });
+
+        it('should create error if type is wrong', function () {
+          data.data['2'].effects = { '1': { type: 'joe' } };
+          expect(validator(data)).toEqual([
+            { type: 'effectType', key: '2, effect(1)', message: msg.effectType.invalid }
+          ]);
+        });
       });
     });
   });
@@ -202,6 +215,14 @@ describe('Validator', function () {
     it('should not create error if effects is missing', valid('effects', {}));
     it('should create error if effects is not an object',
         invalid('effects', 'obj', { effects: [] }));
+  });
+
+  describe('#effectType', function () {
+    defined('effectType');
+
+    it('should not create error if effects have a type', valid('effectType', { type: 'rate' }));
+    it('should create error if effects have no type', invalid('effectType', 'type', { }));
+    it('should create error if type is wrong', invalid('effectType', 'invalid', { type: 'joe' }));
   });
 
   describe('#file', function () {

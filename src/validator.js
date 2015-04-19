@@ -62,6 +62,13 @@ let validate = {
     let error = addError(errors, 'file', key);
     if (isUndefined(data.file)) { return error('file must be included when type is file'); }
     return error('file must be a string');
+  },
+
+  effectType(key, data, errors = []) {
+    if (data.type === 'rate') { return errors; }
+    let error = addError(errors, 'effectType', key);
+    if (isUndefined(data.type)) { return error('type must be included'); }
+    return error('"' + data.type + '" is not a valid type');
   }
 };
 
@@ -83,6 +90,13 @@ module.exports = function (json = {}) {
     errors = validate.cuts(x, data, errors);
     errors = validate.effects(x, data, errors);
     errors = validate.file(x, data, errors);
+
+    if (isUndefined(data.effects) || !isObject(data.effects)) { return; }
+    Object.keys(data.effects).forEach(y => {
+      let effect = data.effects[y];
+
+      errors = validate.effectType(`${x}, effect(${y})`, effect, errors);
+    });
   });
 
   return errors;
