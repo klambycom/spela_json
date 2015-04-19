@@ -91,11 +91,24 @@ describe('Validator', function () {
           .toEqual([{ type: 'start', key: '1', message: msg.start.zero }]);
       });
 
-
       it('should create error if end-field is missing', function () {
         delete data.data['2'].end;
         expect(validator(data)).toEqual([
           { type: 'end', key: '2', message: msg.end.num }
+        ]);
+      });
+
+      it('should create error if end-field is missing', function () {
+        data.data['2'].cuts = 1;
+        expect(validator(data)).toEqual([
+          { type: 'cuts', key: '2', message: msg.cuts.obj }
+        ]);
+      });
+
+      it('should create error if end-field is missing', function () {
+        data.data['2'].effects = true;
+        expect(validator(data)).toEqual([
+          { type: 'effects', key: '2', message: msg.effects.obj }
         ]);
       });
     });
