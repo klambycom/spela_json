@@ -6,7 +6,7 @@
 
 /*! */
 
-let AJSON = require('./parser');
+let parser = require('./parser');
 let validator = require('./validator');
 
 // Create a copy of JSON
@@ -35,7 +35,7 @@ class Player {
 
   constructor(json = {}, context = new AudioContext()) {
     this._context = context;
-    this._AJSON = AJSON(context);
+    this._parser = parser(context);
     this.setJSON(json);
   }
 
@@ -112,7 +112,7 @@ class Player {
 
     this._json_data = cloneObject(json);
     this._sources = []; // Reset buffer sources
-    this._parsed = this._AJSON.parse(cloneObject(json));
+    this._parsed = this._parser.parse(cloneObject(json));
   }
 
   /**

@@ -12,7 +12,7 @@ var _classCallCheck = function (instance, Constructor) { if (!(instance instance
 
 /*! */
 
-var AJSON = require("./parser");
+var parser = require("./parser");
 var validator = require("./validator");
 
 // Create a copy of JSON
@@ -46,7 +46,7 @@ var Player = (function () {
     _classCallCheck(this, Player);
 
     this._context = context;
-    this._AJSON = AJSON(context);
+    this._parser = parser(context);
     this.setJSON(json);
   }
 
@@ -175,7 +175,7 @@ var Player = (function () {
 
         this._json_data = cloneObject(json);
         this._sources = []; // Reset buffer sources
-        this._parsed = this._AJSON.parse(cloneObject(json));
+        this._parsed = this._parser.parse(cloneObject(json));
       },
       writable: true,
       configurable: true
