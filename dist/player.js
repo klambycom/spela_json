@@ -23,6 +23,12 @@ var cloneObject = function (json) {
 // Stupid jshint with bad documentation, bad constructor
 var AudioContext = window.AudioContext || window.webkitAudioContext;
 
+function ValidationError(errors) {
+  this.name = "ValidationError";
+  this.message = "Input data is not valid SpelaJSON-data";
+  this.errors = errors;
+}
+
 var Player = (function () {
   /**
    * Create a player-object with the JSON, and optional AudioContext. The
@@ -31,7 +37,7 @@ var Player = (function () {
    * @method constructor
    * @param {Object} json The audio json
    * @param {AudioContext} context
-   * @throws {ValidationException} Invalid JSON
+   * @throws {ValidationError} Invalid JSON
    */
 
   function Player() {
@@ -157,11 +163,16 @@ var Player = (function () {
        *
        * @method setJSON
        * @param {Object} json The audio json
-       * @throws {ValidationException} Invalid JSON
+       * @throws {ValidationError} Invalid JSON
        */
 
       value: function setJSON() {
         var json = arguments[0] === undefined ? {} : arguments[0];
+        var errors = validator(json);
+        if (errors.length > 0) {
+          throw new ValidationError(errors);
+        }
+
         this._json_data = cloneObject(json);
         this._sources = []; // Reset buffer sources
         this._parsed = this._AJSON.parse(json);

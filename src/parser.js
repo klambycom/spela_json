@@ -15,7 +15,6 @@
 /*! */
 
 let _builder = require('./builder');
-let validator = require('./validator');
 
 let cutInParts = function (end, data) {
   let start = 0;
@@ -92,12 +91,6 @@ module.exports = function (context) {
     .filter(isFile(json))
     .map(x => json.data[x]);
 
-  function ValidationException(errors) {
-    this.name = 'ValidationException';
-    this.message = 'The data is not valid SpelaJSON-data';
-    this.errors = errors;
-  }
-
   return {
 
     /**
@@ -105,13 +98,9 @@ module.exports = function (context) {
      *
      * @method parse
      * @param {Object} json
-     * @throws {ValidationException} Invalid JSON
      */
 
     parse(json) {
-      let errors = validator(json);
-      if (errors.length > 0) { throw new ValidationException(errors); }
-
       nr_of_loaded_files = 0;
       duration = 0;
       files = findFiles(json);
