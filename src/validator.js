@@ -18,7 +18,7 @@ let validate = {
     // Error
     let error = addError(errors, 'type', key);
     if (isUndefined(data.type)) { return error('type must be included'); }
-    return error('"' + data.type + '" is not a valid type');
+    return error(`"${data.type}" is not a valid type`);
   },
 
   start(key, data, errors = []) {
@@ -68,7 +68,7 @@ let validate = {
     if (data.type === 'rate') { return errors; }
     let error = addError(errors, 'effectType', key);
     if (isUndefined(data.type)) { return error('type must be included'); }
-    return error('"' + data.type + '" is not a valid type');
+    return error(`"${data.type}" is not a valid type`);
   }
 };
 
